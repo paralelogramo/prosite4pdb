@@ -22,9 +22,11 @@
     "@popperjs/core": "^2.11.6",
     "@types/d3": "^7.4.0",
     "@types/d3-selection": "^3.0.3",
+    "antlr4": "^4.11.0",
     "bootstrap": "^5.2.3",
     "d3": "^7.7.0",
     "d3-lasso": "^0.0.5",
+    "ngx-device-detector": "^4.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

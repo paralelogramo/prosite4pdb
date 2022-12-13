@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as D3 from 'd3';
 import { AminoAction } from 'src/app/models/amino-action.model';
+import { FormGroup, FormControl } from '@angular/forms';
+import { Parser } from 'src/assets/js/Parser';
+
 
 @Component({
   selector: 'app-canvas',
@@ -27,13 +30,18 @@ export class CanvasComponent {
     { name: 'Gap', url: '../../../../assets/Gap.png', action: 'selectGap'},
     { name: 'Group', url: '../../../../assets/Group.png', action: 'selectGroup'},
     { name: 'Except', url: '../../../../assets/Except.png', action: 'selectExcept'}
-  ]; 
+  ];
+
+  inputPatternForm = new FormGroup({
+    pattern: new FormControl(''),
+  });
 
   constructor() {
   }
 
   searchPattern() {
-    // Pass to js parser and get the sql query
+    const res = Parser(this.inputPatternForm.value.pattern);
+    alert(res)
   }
 
   public selectAminoAcid() {

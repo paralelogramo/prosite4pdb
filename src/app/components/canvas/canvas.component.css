@@ -27,6 +27,8 @@
 .btn-custom{
     border: 2px solid #006CA8;
     width: 100%;
+    height: 100%;
+    justify-content: center;
 }
 
 .btn-custom:hover{
@@ -38,7 +40,8 @@
 }
 
 .search-icon{
-    width: 34px;
+    height: 1.8rem;
+    width: 1.8rem;
 }
 
 ::-webkit-input-placeholder {
@@ -58,7 +61,7 @@
 }
 
 .extra-buttons{
-    margin-left: 100px;
+    margin-left: 14vh;
 }
 .hr-custom{
     margin-top: 25px;
@@ -76,7 +79,7 @@
 .frame{
     width: 90px;
     height: 75px;
-    margin-left: 100px;
+    margin-left: 14vh;
     margin-bottom: 5px;
     border: solid #006ca8;
     color: #006ca8;
