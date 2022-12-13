@@ -3,10 +3,10 @@ import ExprLexer from './ExprLexer.js';
 import ExprParser from './ExprParser.js';
 import ExprListener from './ExprListener.js';
 import ExprErrorListener from './ExprErrorListener.js';
-import { getError, setError } from './catchError.js';
+import { getError, setError } from './catchElements';
 
 export function Parser(pattern) {
-    setError('');
+    setError({});
     const input = pattern;
     const chars = new antlr4.InputStream(input);
     const lexer = new ExprLexer(chars);
@@ -21,25 +21,25 @@ export function Parser(pattern) {
 
     const tree = parser.pattern();
 
-    class Visitor {
-    visitChildren(ctx) {
-        if (!ctx) {
-        return;
-        }
+    // class Visitor {
+    // visitChildren(ctx) {
+    //     if (!ctx) {
+    //     return;
+    //     }
 
-        if (ctx.children) {
-        return ctx.children.map(child => {
-            if (child.children && child.children.length != 0) {
-            return child.accept(this);
-            } else {
-            return child.getText();
-            }
-        });
-        }
-    }
-    }
+    //     if (ctx.children) {
+    //     return ctx.children.map(child => {
+    //         if (child.children && child.children.length != 0) {
+    //         return child.accept(this);
+    //         } else {
+    //         return child.getText();
+    //         }
+    //     });
+    //     }
+    // }
+    // }
 
-    tree.accept(new Visitor());
+    // tree.accept(new Visitor());
     var error = getError();
 
     return error;

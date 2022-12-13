@@ -41,7 +41,7 @@ export class CanvasComponent {
 
   searchPattern() {
     const res = Parser(this.inputPatternForm.value.pattern);
-    alert(res)
+    alert(res.message);
   }
 
   public selectAminoAcid() {
