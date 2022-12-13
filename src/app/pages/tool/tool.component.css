@@ -1,0 +1,12 @@
+.base{
+
+}
+
+.navbar-container{
+    width: 100%;
+    position: sticky;
+}
+
+.canvas{
+    min-width: 100%;
+}

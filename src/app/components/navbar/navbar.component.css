@@ -1,0 +1,31 @@
+.navbar-custom {
+    background-color: rgb(34, 34, 34);
+    width: 100%;
+}
+
+.name-container {
+    color: rgb(157, 157, 157);
+    font-family: Arial, sans-serif;
+    font-size: 1.5em;
+    padding-top: 5px;
+}
+
+.bg-custom {
+    background-color: rgb(34, 34, 34);
+    position: sticky;
+}
+
+.navbar-collapse-custom{
+    margin-left: 2rem;
+}
+
+.form-control-custom{
+    background-color: rgba(157, 157, 157, 0.2);
+    border: none;
+}
+
+.btn-custom{
+    border: 2px solid rgba(157, 157, 157, 0.8);
+    color: rgb(157, 157, 157);
+}
+

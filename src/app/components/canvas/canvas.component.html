@@ -1,0 +1,59 @@
+<div class="container-fluid container-custom">
+    <div class="canvas-container">
+        <div class="left-button-group actions-group float-md-left">
+            <div class="extra-buttons">
+                <button type="button" class="btn btn-primary btn-primary-custom">
+                    <img src="../../../assets/Save.png" style="width:15px;height:auto;">
+                </button>
+                <button type="button" class="btn btn-warning btn-warning-custom">
+                    <img src="../../../assets/Load.png" style="width:15px;height:auto;">
+                </button>
+            </div>
+            <div class="actions-group2">
+                <div class="actions-container frame" *ngFor="let action of actions">
+                    <div type="button" class="action-container" (click)='handleClick(action.action)'>
+                        <div class="d-flex justify-content-center text-center">
+                            <strong>{{action.name}}</strong>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <img src={{action.url}} alt="aminoAcidIcon" style="width:35px;height:auto;margin-top:4px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div #canvasGraph class="canvas">
+            
+        </div>
+        <div class="text-input">
+            <div class="py-2 row">
+                <div class="input-container col-md-11">
+                    <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN].">
+                </div>
+                <div class="search-container col-md-1 text-end">
+                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchPattern()">
+                        <img class="search-icon" src="../../../assets/search-icon.png">
+                    </button>
+                </div>
+                <!-- <img class="text-input-state" src="../../../assets/input-no-check.png"> -->
+            </div>
+        </div>
+        <!-- <div class="right-button-group">
+            botones der
+        </div> -->
+    </div>
+
+    <hr class="hr hr-custom" />
+
+    <div class="results-container">
+        <div class="row">
+            <div class="col-md-4">
+                asd
+            </div>
+            <div class="col-md-8">
+                asd
+            </div>
+        </div>
+    </div>
+</div>
