@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AminoServiceService } from './amino-service.service';
+import { AminoService } from './amino.service';
 
-describe('AminoServiceService', () => {
-  let service: AminoServiceService;
+describe('AminoService', () => {
+  let service: AminoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AminoServiceService);
+    service = TestBed.inject(AminoService);
   });
 
   it('should be created', () => {

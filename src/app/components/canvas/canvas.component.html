@@ -34,10 +34,11 @@
                     </form>
                 </div>
                 <div class="search-container col-md-1">
-                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchPattern()">
+                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)">
                         <img class="search-icon" src="../../../assets/search-icon.png">
                     </button>
                 </div>
+                
                 <!-- <img class="text-input-state" src="../../../assets/input-no-check.png"> -->
             </div>
         </div>
@@ -48,14 +49,83 @@
 
     <hr class="hr hr-custom" />
 
-    <div class="results-container">
+    <div class="results-container h-75 custom-res">
         <div class="row">
-            <div class="col-md-4">
-                asd
+            <div class="container filters-container">
+                <div class="col-md-4">
+                    <!-- <form>
+                        <div class="form-group form-inline">
+                            Search country by name: 
+                            <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="searchTerm"
+                            (input)="search($event.target.value)" />
+                        </div>
+                    </form> -->
+                    <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" />
+                </div>
             </div>
-            <div class="col-md-8">
-                asd
+        </div>
+        <div class="row">
+            <div class="col-md-12 container-custom-table">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Classification</th>
+                        <th scope="col">Organism</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                      <tr *ngFor="let protein of results">
+                        <th scope="row">{{ protein.id }}</th>
+                        <td>{{protein.title}}</td>
+                        <td>{{protein.classification}}</td>
+                        <td>{{protein.organism}}</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-custom" (click)="openProteinPDB(protein.id)">
+                                <img class="search-icon" src="../../../assets/goToPDB.png">
+                            </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+                <div class="row container-pagination-custom" *ngIf="results.length != 0">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <ngb-pagination
+                            [collectionSize]="collectionSize"
+                            [(page)]="page"
+                            [maxSize]="5"
+                            [pageSize]="pageSize"
+                            [rotate]="true"
+                            [ellipses]="false"
+                            [boundaryLinks]="true"
+                            size="lg"
+                            (pageChange)="onPageChange($event, content)"
+                        >
+                            <ng-template ngbPaginationFirst>First</ng-template>
+                            <ng-template ngbPaginationLast>Last</ng-template>
+                            <ng-template ngbPaginationPrevious>Prev</ng-template>
+                            <ng-template ngbPaginationNext>Next</ng-template>
+                            <ng-template ngbPaginationEllipsis>...</ng-template>
+                            <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+                        </ngb-pagination>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #content class="modal-center" let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <h4 class="modal-title col-12 text-center" id="modal-basic-title">Searching Proteins...</h4>
+        <div class="div text-center" style="margin-top: 15px;">
+            <img src="../../../assets/molecules.gif" alt="gif-molecules" class="molecules_gif">
+        </div>
+    </div>
+</ng-template>
+
+<ngx-notifier
+[duration]="3000"
+></ngx-notifier>

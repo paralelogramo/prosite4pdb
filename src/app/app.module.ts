@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -12,6 +12,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { ToolComponent } from './pages/tool/tool.component';
 import { ResultsComponent } from './components/results/results.component';
+import { HttpClientModule } from '@angular/common/http';
+import { TableFilterPipe } from './pipes/table-filter/table-filter-pipe';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
+import { NgxNotifierModule } from 'ngx-notifier';
 
 @NgModule({
   declarations: [
@@ -22,14 +26,20 @@ import { ResultsComponent } from './components/results/results.component';
     FooterComponent,
     ToolComponent,
     ResultsComponent,
+    TableFilterPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    NgxNotifierModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

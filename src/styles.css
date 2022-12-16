@@ -1,2 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
+
+.ngx-notification {
+    background-color: #2d2d30;
+    border-color: #272729;
+    color: #c9c9c9;
+  }

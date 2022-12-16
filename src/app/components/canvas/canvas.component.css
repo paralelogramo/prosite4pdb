@@ -118,3 +118,33 @@
     box-shadow: 0 0 15px 3px rgb(0 0 0 / 0.2);
     border: 2px solid #ff9531;
 }
+
+.container-custom-table{
+    min-height: 40vh;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+}
+
+.filters-container{
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+}
+
+.container-pagination-custom{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.molecules_gif{
+    height: auto;
+    width: 50%;
+}
+
+.ngx-notification {
+    background-color: #2d2d30;
+    border-color: #272729;
+    color: #c9c9c9;
+  }

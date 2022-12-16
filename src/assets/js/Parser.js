@@ -3,7 +3,8 @@ import ExprLexer from './ExprLexer.js';
 import ExprParser from './ExprParser.js';
 import ExprListener from './ExprListener.js';
 import ExprErrorListener from './ExprErrorListener.js';
-import { getError, setError } from './catchElements';
+import { getBigQuery, getError, setError } from './catchElements';
+import getQuery from './enumQueries.js';
 
 export function Parser(pattern) {
     setError({});
@@ -13,6 +14,8 @@ export function Parser(pattern) {
     const tokens = new antlr4.CommonTokenStream(lexer);
     const parser = new ExprParser(tokens);
     
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(new ExprErrorListener());
     parser.removeErrorListeners();
     parser.addErrorListener(new ExprErrorListener());
     parser.removeParseListeners();
@@ -40,7 +43,15 @@ export function Parser(pattern) {
     // }
 
     // tree.accept(new Visitor());
-    var error = getError();
 
-    return error;
+    if (isEmpty(getError())) {
+        return getBigQuery();
+    }
+    else {
+        return getError();
+    }
+}
+
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
 }
