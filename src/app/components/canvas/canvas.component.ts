@@ -1,9 +1,9 @@
-import { Component, ElementRef, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import * as D3 from 'd3';
+import networkD3 from '../../../assets/networkD3/networkD3.js';
 import { AminoAction } from 'src/app/models/amino-action.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Parser } from 'src/assets/js/Parser';
-import { getBigQuery } from 'src/assets/js/catchElements';
 import { AminoService } from 'src/app/services/aminoService/amino.service';
 import { NgbModal, NgbModalConfig, NgbModalRef, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxNotifierService } from 'ngx-notifier';
@@ -20,17 +20,8 @@ interface Result {
     templateUrl: './canvas.component.html',
     styleUrls: ['./canvas.component.css']
 })
-export class CanvasComponent {
-    @ViewChild('canvasGraph') element: ElementRef | undefined;
-
-    private host: D3.Selection<d3.BaseType, {}, d3.BaseType, any>;
-    private svg: D3.Selection<SVGAElement, {}, d3.BaseType, any>;
-    private width: number;
-    private height: number;
-    private radius: number;
-    private htmlElement: HTMLElement;
-    private nodes: string[];
-    private edges: string[];
+export class CanvasComponent implements OnInit{
+    networkGraph = networkD3();
 
     searchTerm: string;
     page = 1;
@@ -67,6 +58,10 @@ export class CanvasComponent {
         config.backdrop = 'static';
 		config.keyboard = false;
         config.size = 'sm';
+    }
+
+    ngOnInit(): void {
+        D3.select('canvas-container').call(this.networkGraph);
     }
 
     onPageChange(event: any, content){
