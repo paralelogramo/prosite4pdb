@@ -1,6 +1,6 @@
 <div class="container-fluid container-custom">
     <div class="canvas-container">
-        <div class="left-button-group actions-group float-md-left flex-wrap">
+        <!-- <div class="left-button-group actions-group float-md-left flex-wrap">
             <div class="extra-buttons">
                 <button type="button" class="btn btn-primary btn-primary-custom">
                     <img src="../../../assets/Save.png" style="width:1vw;height:2.2vh;">
@@ -21,10 +21,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         
-        <div #canvasGraph class="canvas">
-            
+        <div id="canvasID" class="canvas" (window:resize)="onResize($event)">
+            <div id="canvasGraph">
+
+            </div>
         </div>
         <div class="text-input">
             <div class="py-2 row">
@@ -126,6 +128,4 @@
     </div>
 </ng-template>
 
-<ngx-notifier
-[duration]="3000"
-></ngx-notifier>
+<ngx-notifier [duration]="3000"></ngx-notifier>

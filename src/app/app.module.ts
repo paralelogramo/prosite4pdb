@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { ToolComponent } from './pages/tool/tool.component';
 import { ResultsComponent } from './components/results/results.component';
@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TableFilterPipe } from './pipes/table-filter/table-filter-pipe';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgxNotifierModule } from 'ngx-notifier';
+import { ModalSelectAminoComponent } from './components/modals/modal-select-amino/modal-select-amino.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { NgxNotifierModule } from 'ngx-notifier';
     FooterComponent,
     ToolComponent,
     ResultsComponent,
-    TableFilterPipe
+    TableFilterPipe,
+    ModalSelectAminoComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4 class="modal-title col-12 text-center" id="modal-basic-title">Select Amino Type</h4>
+</div>
+<div class="modal-body">
+    <div class="row" style="margin: 0px">
+        <ng-template [ngIf]="modalType != 'amino'" [ngIfElse]="group">
+            <div class="col-md-6 col-custom" *ngFor="let amino of options">
+                <label id="radioActive" class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="options"value={{amino.value}} [(ngModel)]='amino.checked'>
+                    {{amino.option}}
+                </label>
+            </div>
+        </ng-template>
+        <ng-template #group>
+            <form [formGroup]="aminoSingle">
+                <div class="col-md-6 col-custom" *ngFor="let amino of options">
+                    <label id="radioActive" class="form-check-label">
+                        <input type="radio" class="form-check-input" name="aminoOption" value={{amino.value}} formControlName="aminoOption">
+                        {{amino.option}}
+                    </label>
+                </div>
+            </form>
+        </ng-template>
+    </div>
+</div>
+<div class="modal-footer col-12 justify-content-end">
+    <button type="button" class="btn btn-primary" (click)="onClose('save')">
+        Save
+    </button>
+    <button type="button" class="btn btn-outline-primary" (click)="onClose('')">
+        Cancel
+    </button>
+</div>

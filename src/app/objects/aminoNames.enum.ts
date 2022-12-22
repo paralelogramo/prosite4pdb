@@ -1,0 +1,22 @@
+export enum AminosNames {
+    ALA = 'Alanine (ALA)',
+    ARG = 'Arginine (ARG)',
+    ASN = 'Asparagine (ASN)',
+    ASP = 'Aspartic Acid (ASP)',
+    CYS = 'Cysteine (CYS)',
+    GLN = 'Glutamine (GL)',
+    GLU = 'Glutamic Acid (GLU)',
+    GLY = 'Glycine (GLY)',
+    HIS = 'Histidine (HIS)',
+    ILE = 'Isoleucine (ILE)',
+    LEU = 'Leucine (LEU)',
+    LYS = 'Lysine (LYS)',
+    MET = 'Methionine (MET)',
+    PHE = 'Phenylalanine (PHE)',
+    PRO = 'Proline (PRO)',
+    SER = 'Serine (SER)',
+    THR = 'Threonine (THR)',
+    TRP = 'Tryptophan (TRP)',
+    TYR = 'Tyrosine (TYR)',
+    VAL = 'Valine (VAL)'
+}
