@@ -45,7 +45,10 @@ export function Parser(pattern) {
     // tree.accept(new Visitor());
 
     if (isEmpty(getError())) {
-        return getBigQuery();
+        return {
+            message: 'success',
+            query: getBigQuery()
+        }
     }
     else {
         return getError();

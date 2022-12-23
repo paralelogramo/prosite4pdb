@@ -1,6 +1,6 @@
 <div class="container-fluid container-custom">
     <div class="canvas-container">
-        <!-- <div class="left-button-group actions-group float-md-left flex-wrap">
+        <div class="left-button-group actions-group float-md-left flex-wrap">
             <div class="extra-buttons">
                 <button type="button" class="btn btn-primary btn-primary-custom">
                     <img src="../../../assets/Save.png" style="width:1vw;height:2.2vh;">
@@ -9,34 +9,32 @@
                     <img src="../../../assets/Load.png" style="width:1vw;height:2.2vh;">
                 </button>
             </div>
-            <div class="actions-group2">
-                <div class="actions-container frame" *ngFor="let action of actions">
-                    <div type="button" class="action-container" (click)='handleClick(action.action)'>
-                        <div class="d-flex justify-content-center text-center">
-                            <strong>{{action.name}}</strong>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <img src={{action.url}} alt="aminoAcidIcon" style="width:2.3vw;height:4.6vh;margin-top:4px;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        
+        </div>
         <div id="canvasID" class="canvas" (window:resize)="onResize($event)">
-            <div id="canvasGraph">
-
+            <div class='canvasGraph' id="canvasGraph">
+            </div>
+            <div class="contextMenu" *ngIf="canvasContextMenu==true">
+                <app-canvas-right-click-menu
+                    [x]="canvasContextMenuX"
+                    [y]="canvasContextMenuY"
+                    (optionSelected)="onCanvasContextMenuOptionSelected($event)"
+                ></app-canvas-right-click-menu>
             </div>
         </div>
         <div class="text-input">
             <div class="py-2 row">
                 <div class="input-container col-md-11">
                     <form [formGroup]="inputPatternForm">
-                        <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN]." formControlName="pattern">
+                        <div class="inputWithSufix">
+                            <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
+                            <div class="sufix">
+                                <img class="checkInput img-fluid mx-auto d-block" src="../../../assets/input-no-check.png">
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="search-container col-md-1">
-                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)">
+                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)" [disabled]="!correctInput">
                         <img class="search-icon" src="../../../assets/search-icon.png">
                     </button>
                 </div>

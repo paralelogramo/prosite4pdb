@@ -17,6 +17,8 @@ import { TableFilterPipe } from './pipes/table-filter/table-filter-pipe';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgxNotifierModule } from 'ngx-notifier';
 import { ModalSelectAminoComponent } from './components/modals/modal-select-amino/modal-select-amino.component';
+import { CanvasRightClickMenuComponent } from './components/modals/canvas-right-click-menu/canvas-right-click-menu.component';
+import { ButtonRightClickMenuComponent } from './components/modals/button-right-click-menu/button-right-click-menu.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { ModalSelectAminoComponent } from './components/modals/modal-select-amin
     ResultsComponent,
     TableFilterPipe,
     ModalSelectAminoComponent,
+    CanvasRightClickMenuComponent,
+    ButtonRightClickMenuComponent
   ],
   imports: [
     BrowserModule,

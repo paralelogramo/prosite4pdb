@@ -1,0 +1,9 @@
+.contextmenu{
+    border-radius: 8px;
+    background-color: rgb(235, 235, 235);
+    border-color: #006CA8;
+}
+
+.btn-custom{
+   border-color: #006CA8;
+}

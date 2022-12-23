@@ -44,7 +44,6 @@ export class ModalSelectAminoComponent implements OnInit {
             });
             this.options.push(aminoTemp);
         });
-        console.log(this.options)
     }
 
     onChangeOption(amino: string){
