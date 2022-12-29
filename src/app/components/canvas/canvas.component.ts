@@ -159,7 +159,6 @@ export class CanvasComponent implements OnInit{
         .onBackgroundRightClick(event => {
             if(this.canvasContextMenu){
                 this.disableContextMenu();
-                return;
             }
             this.canvasContextMenuX = event.offsetX
             this.canvasContextMenuY = event.offsetY
@@ -371,6 +370,7 @@ export class CanvasComponent implements OnInit{
     }
 
     genNode(coords: any) {
+        console.log(coords)
         let node: AminoGraph = {
             id: this.graph.graphData().nodes.length+1,
             x: coords.x,
@@ -426,52 +426,5 @@ export class CanvasComponent implements OnInit{
 
     openProteinPDB(id: string) {
         window.open('https://www.rcsb.org/structure/' + id);
-    }
-
-    public selectAminoAcid() {
-        console.log('Amino Acid')
-    }
-
-    public selectAnyAminoAcid() {
-        console.log('Any Amino Acid')
-    }
-
-    public selectNextAminoAcid() {
-        console.log('Next Amino Acid')
-    }
-
-    public selectGap() {
-        console.log('Gap')
-    }
-
-    public selectGroup() {
-        console.log('Group')
-    }
-
-    public selectExcept() {
-        console.log('Except')
-    }
-
-    public handleClick(event: string) {
-        switch (event) {
-        case 'selectAminoAcid':
-            this.selectAminoAcid();
-            break;
-        case 'selectAnyAminoAcid':
-            this.selectAnyAminoAcid();
-            break;
-        case 'selectNextAminoAcid':
-            this.selectNextAminoAcid();
-            break;
-        case 'selectGap':
-            this.selectGap();
-            break;
-        case 'selectGroup':
-            this.selectGroup();
-            break;
-        case 'selectExcept':
-            this.selectExcept();
-            break;
-        }
     }
 }

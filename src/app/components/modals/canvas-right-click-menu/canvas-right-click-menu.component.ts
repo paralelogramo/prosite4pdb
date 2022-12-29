@@ -14,8 +14,6 @@ export class CanvasRightClickMenuComponent implements OnInit{
   }
 
   ngOnInit() {
-    console.log('x: ' + this.x);
-    console.log('y: ' + this.y);
   }
 
   action(option: string) {
