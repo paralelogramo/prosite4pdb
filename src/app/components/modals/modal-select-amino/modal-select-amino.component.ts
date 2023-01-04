@@ -19,6 +19,8 @@ export class ModalSelectAminoComponent implements OnInit {
 
     aminoNames = Object.values(AminosNames);
 
+    disabledSave: boolean = false;
+
     modalref: NgbModalRef;
     modalType: string;
 
@@ -46,8 +48,9 @@ export class ModalSelectAminoComponent implements OnInit {
         });
     }
 
-    onChangeOption(amino: string){
-        
+    onChangeOption(){
+        this.disabledSave = this.options.filter(option => option.checked).length === 0;
+        console.log(this.disabledSave)
     }
 
     onClose(result: string){

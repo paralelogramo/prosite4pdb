@@ -6,6 +6,7 @@
         <div class="row" style="margin: 0px">
             <div class="col-md-6 col-custom" *ngFor="let amino of options">
                 <label id="radioActive" class="form-check-label">
+                    <!-- <input type="checkbox" class="form-check-input" name="options"value={{amino.value}} [(ngModel)]='amino.checked' (change)="onChangeOption()"> -->
                     <input type="checkbox" class="form-check-input" name="options"value={{amino.value}} [(ngModel)]='amino.checked'>
                     {{amino.option}}
                 </label>
@@ -26,7 +27,7 @@
     </ng-template>
 </div>
 <div class="modal-footer col-12 justify-content-end">
-    <button type="button" class="btn btn-primary" (click)="onClose('save')">
+    <button type="button" class="btn btn-primary" (click)="onClose('save')" [disabled]="disabledSave">
         Save
     </button>
     <button type="button" class="btn btn-outline-primary" (click)="onClose('')">

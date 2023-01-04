@@ -20,6 +20,13 @@
                     (optionSelected)="onCanvasContextMenuOptionSelected($event)"
                 ></app-canvas-right-click-menu>
             </div>
+            <div class="contextMenuNode" *ngIf="nodeContextMenu==true">
+                <app-button-right-click-menu
+                    [x]="nodeContextMenuX"
+                    [y]="nodeContextMenuY"
+                    (optionSelected)="onNodeContextMenuOptionSelected($event)"
+                ></app-button-right-click-menu>
+            </div>
         </div>
         <div class="text-input">
             <div class="py-2 row">

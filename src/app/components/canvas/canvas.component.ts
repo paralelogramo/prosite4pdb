@@ -52,6 +52,10 @@ export class CanvasComponent implements OnInit{
     canvasContextMenuX = 0; 
     canvasContextMenuY = 0; 
 
+    nodeContextMenu = false;
+    nodeContextMenuX = 0; 
+    nodeContextMenuY = 0; 
+
     graph = fg.default()
 
     imgAminoUrl= '../../../../assets/graphIcons/Amino Acid.png';
@@ -85,7 +89,7 @@ export class CanvasComponent implements OnInit{
     // list_aminos: AminoGraph[] = [];
 
     links = [
-        { source: 1, target: 2, text: "next", curvature : 0.0}
+        { source: 1, target: 2, text: "Next", curvature : 0.0}
     ];
     // links: LinkGraph[] = [];
 
@@ -125,46 +129,47 @@ export class CanvasComponent implements OnInit{
         this.graph
         (document.getElementById('canvasGraph'))
         .graphData(data)
-        .linkDirectionalParticles(2)
+        .linkDirectionalParticleSpeed(0.01)
+        .linkDirectionalParticles(3)
+        .linkDirectionalParticleColor((link:any) => link.color = '#006CA8')
         .linkCurvature('curvature')
         .nodeLabel('aminos')
         .enableNodeDrag(true)
         .linkLabel('text')
-        .onNodeDragEnd(n => {
-            n.fx = n.x;
-            n.fy = n.y;
+        .onNodeDrag(node => {
+            this.canvasContextMenu = false;
+            this.nodeContextMenu = false;
+        })
+        .onNodeDragEnd(node => {
+            node.fx = node.x;
+            node.fy = node.y;
         })
         .onBackgroundClick(event => {
-            this.disableContextMenu();
-
-            // if (this.selectedAmino != null) {
-            //     this.selectedAmino = null;
-            // }
-            // else{
-            //     let coords = this.graph.screen2GraphCoords(event.x, event.y);
-            //     let newNode = this.genNode(coords);
-
-            //     let nodes = [...this.graph.graphData().nodes, newNode];
-
-            //     this.graph.graphData({
-            //         nodes: nodes,
-            //         links: [...this.graph.graphData().links]
-            //     })
-            //     data.nodes.forEach(node => {
-            //         node.fx = node.x;
-            //         node.fy = node.y;
-            //     });
-            // }
+            this.canvasContextMenu = false;
+            this.nodeContextMenu = false;
         })
         .onBackgroundRightClick(event => {
+            this.nodeContextMenu = false;
             if(this.canvasContextMenu){
-                this.disableContextMenu();
+                this.canvasContextMenu = false;
             }
             this.canvasContextMenuX = event.offsetX
             this.canvasContextMenuY = event.offsetY
             this.canvasContextMenu = true;
         })
         .linkCanvasObjectMode(() => 'after')
+        .linkCanvasObject((link: any, ctx: any) => {
+            const fontSize = 3;
+            ctx.font = `bold ${fontSize}px Sans-Serif`;
+            // let dy = link.target.y - link.source.y;
+            // let h = Math.sqrt((link.target.x - link.source.x)**2+(link.target.y - link.source.y)**2);
+            // let angle = Math.asin(dy/h);
+            // ctx.rotate(angle);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillStyle = '#006CA8';
+            ctx.fillText(link.text, (link.source.x + link.target.x) / 2, (link.source.y + link.target.y) / 2);
+        })
         .nodeCanvasObject((node: any, ctx) => {
             const size = 8;
             const img = new Image();
@@ -181,8 +186,10 @@ export class CanvasComponent implements OnInit{
                 img.src = this.getAminoIcon(node.aminos[0]);
                 ctx.drawImage(img, node.x - size / 2, node.y - size / 2, size, size);
             }
-            })
+        })
         .onNodeClick((node: any, ctx: any) => {
+            this.canvasContextMenu = false;
+            this.nodeContextMenu = false;
             let data;
             if(node.isExcept){
                 data ={
@@ -240,8 +247,12 @@ export class CanvasComponent implements OnInit{
             //     }
             // }
         })
-
-        
+        .onNodeRightClick((node, event) => {
+            
+            this.nodeContextMenuX = event.offsetX
+            this.nodeContextMenuY = event.offsetY
+            this.nodeContextMenu = true;
+        })
         this.onResize(null);
     }
 
@@ -256,30 +267,56 @@ export class CanvasComponent implements OnInit{
         ][id%1]();
     }
 
+    // Falta implementar
+    searchExistingNodeOnSource(node: any){
+        
+    }
+
+    // Falta implementar
+    searchExistingNodeOnTarget(node: any){
+        
+    }
+
+    searchExistingNode(node: any){
+        
+    }
+
     onCanvasContextMenuOptionSelected(event: any){
+        let coords = this.graph.screen2GraphCoords(event.x, event.y);
+        let newNode = this.genNode(coords, event.option);
+        let nodes = [...this.graph.graphData().nodes, newNode];
+        this.graph.graphData({
+            nodes: nodes,
+            links: [...this.graph.graphData().links]
+        })
+        this.graph.graphData().nodes.forEach(node => {
+            node.fx = node.x;
+            node.fy = node.y;
+        });
+        this.canvasContextMenu = false;
+    }
+
+    onNodeContextMenuOptionSelected(event: any){
         switch (event.option) {
-            case 'amino':
-                let coords = this.graph.screen2GraphCoords(event.x, event.y);
-                let newNode = this.genNode(coords);
-                let nodes = [...this.graph.graphData().nodes, newNode];
-                this.graph.graphData({
-                    nodes: nodes,
-                    links: [...this.graph.graphData().links]
-                })
+            case 'next':
+                
+                break;
+
+            case 'gap':
+                
+                break;
+            case 'delete':
                 this.graph.graphData().nodes.forEach(node => {
-                    node.fx = node.x;
-                    node.fy = node.y;
+                    if (node.id == event.nodeId) {
+                        
+                    }
                 });
                 break;
         
             default:
                 break;
         }
-        this.canvasContextMenu = false;
-    }
-
-    disableContextMenu() {
-        this.canvasContextMenu = false;
+        this.nodeContextMenu = false;
     }
     
     getAminoIcon(type: string){
@@ -339,9 +376,9 @@ export class CanvasComponent implements OnInit{
         this.inputPatternForm.get('pattern').valueChanges
         .pipe(startWith(null), pairwise())
         .subscribe(([prev, next]: [any, any]) => {
-            let res = Parser(next + '.');
+            let res = Parser(next.toUpperCase() + '.');
             if(res.message === 'success'){
-
+                this.correctInput = true;
             }
             else{
                 this.correctInput = false;
@@ -369,19 +406,65 @@ export class CanvasComponent implements OnInit{
         });
     }
 
-    genNode(coords: any) {
-        console.log(coords)
-        let node: AminoGraph = {
-            id: this.graph.graphData().nodes.length+1,
-            x: coords.x,
-            fx: coords.x,
-            y: coords.y,
-            fy: coords.y,
-            img: this.imgAminoUrl,
-            isGroup: false,
-            isExcept: false,
-            aminos: ['A']
-        };
+    genNode(coords: any, type: string) {
+        let node: AminoGraph;
+        switch (type) {
+            case 'amino':
+                node = {
+                    id: this.graph.graphData().nodes.length+1,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: false,
+                    aminos: ['ALA']
+                };
+                break;
+
+            case 'any':
+                node = {
+                    id: this.graph.graphData().nodes.length+1,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: false,
+                    aminos: ['ANY']
+                };
+                break;
+
+            case 'group':
+                node = {
+                    id: this.graph.graphData().nodes.length+1,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: true,
+                    isExcept: false,
+                    aminos: ['ALA']
+                };
+                break;
+
+            case 'except':
+                node = {
+                    id: this.graph.graphData().nodes.length+1,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: true,
+                    aminos: ['ALA']
+                };
+                break;
+        }
         return node
     }
 
