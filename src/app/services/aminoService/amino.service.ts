@@ -12,13 +12,12 @@ export class AminoService {
 
 	getResultsByPattern(query: string, limit: number, offset: number): any {
 		const params = new HttpParams().set('query', query + ' LIMIT ' + limit + ' OFFSET ' + offset)
-
+		console.log(query + ' LIMIT ' + limit + ' OFFSET ' + offset)
 		return this.http.get<any>(`${this.host}/getProteinsByPattern`, { params });
 	}
 
 	getTotalResultsByPattern(query: string): any {
 		const params = new HttpParams().set('query', "SELECT COUNT(*) as count FROM ( " + query + " ) AS QT")
-
 		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern`, { params });
 	}
 }

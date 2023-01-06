@@ -19,6 +19,9 @@ import { NgxNotifierModule } from 'ngx-notifier';
 import { ModalSelectAminoComponent } from './components/modals/modal-select-amino/modal-select-amino.component';
 import { CanvasRightClickMenuComponent } from './components/modals/canvas-right-click-menu/canvas-right-click-menu.component';
 import { ButtonRightClickMenuComponent } from './components/modals/button-right-click-menu/button-right-click-menu.component';
+import { HowToUseComponent } from './components/modals/how-to-use/how-to-use.component';
+import { PatternComponent } from './components/modals/pattern/pattern.component';
+import { AboutComponent } from './components/modals/about/about.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { ButtonRightClickMenuComponent } from './components/modals/button-right-
     TableFilterPipe,
     ModalSelectAminoComponent,
     CanvasRightClickMenuComponent,
-    ButtonRightClickMenuComponent
+    ButtonRightClickMenuComponent,
+    HowToUseComponent,
+    PatternComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

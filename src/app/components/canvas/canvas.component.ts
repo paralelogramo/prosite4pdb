@@ -14,6 +14,7 @@ import { NgxNotifierService } from 'ngx-notifier';
 import * as fg from 'force-graph';
 import { ModalSelectAminoComponent } from '../modals/modal-select-amino/modal-select-amino.component';
 import { pairwise, startWith } from 'rxjs';
+import { ViewportScroller } from '@angular/common';
 
 interface Result {
     id: string;
@@ -89,7 +90,7 @@ export class CanvasComponent implements OnInit{
     // list_aminos: AminoGraph[] = [];
 
     links = [
-        { source: 1, target: 2, text: "Next", curvature : 0.0}
+        { source: 1, target: 2, text: "X(2)", curvature : 0.0}
     ];
     // links: LinkGraph[] = [];
 
@@ -115,6 +116,7 @@ export class CanvasComponent implements OnInit{
         private aminoService: AminoService,
         private modalService: NgbModal,
         private ngxNotifierService: NgxNotifierService,
+        private scroller: ViewportScroller
     ){}
 
     ngOnInit(): void {
@@ -378,7 +380,12 @@ export class CanvasComponent implements OnInit{
         .subscribe(([prev, next]: [any, any]) => {
             let res = Parser(next.toUpperCase() + '.');
             if(res.message === 'success'){
-                this.correctInput = true;
+                if(next.toUpperCase().split('-').length == 1){
+                    this.correctInput = false;
+                }
+                else {
+                    this.correctInput = true;
+                }
             }
             else{
                 this.correctInput = false;
@@ -390,7 +397,7 @@ export class CanvasComponent implements OnInit{
         this.closeModal = this.modalService.open(content);
         let resultsGet = [];
         this.page = event;
-        this.aminoService.getResultsByPattern(this.comQuery, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
+        this.aminoService.getResultsByPattern(this.comQuery.query, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
             data.forEach(res => {
                 let id = res.id;
                 let title = res.title;
@@ -469,27 +476,30 @@ export class CanvasComponent implements OnInit{
     }
 
     searchFirstGroupPattern(content) {
+        this.page = 1;
         this.closeModal = this.modalService.open(content, {backdrop: 'static', keyboard: false, size: 'sm'});
         let resultsGet = [];
         let pattern = this.inputPatternForm.value.pattern.toUpperCase();
         this.comQuery = Parser(pattern+'.');
-        if(this.comQuery.message) {
+        if(this.comQuery.message !== 'success') {
             this.ngxNotifierService.createToast(this.comQuery.message, 'danger', 3000);
         }
         else{
             this.results = [];
-            this.aminoService.getTotalResultsByPattern(this.comQuery).subscribe((data: any) => {
+            this.aminoService.getTotalResultsByPattern(this.comQuery.query).subscribe((data: any) => {
                 this.collectionSize = data;
                 this.ngxNotifierService.createToast(this.collectionSize + ' results found for pattern: ' + this.inputPatternForm.value.pattern, 'success', 3000);
             },
-            (error: any) => {},
+            (error: any) => {
+                this.ngxNotifierService.createToast('Sorry, a problem happened, please try again later.', 'error', 3000);
+            },
             () => {
                 if (this.collectionSize === 0) {
                     this.ngxNotifierService.createToast('No results found for pattern: ' + this.inputPatternForm.value.pattern, 'warning', 3000);
                 }
                 else{
                     this.closeModal.result.then((result) => {}, (reason) => {});
-                    this.aminoService.getResultsByPattern(this.comQuery, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
+                    this.aminoService.getResultsByPattern(this.comQuery.query, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
                         data.forEach(res => {
                             let id = res.id;
                             let title = res.title;
@@ -502,6 +512,7 @@ export class CanvasComponent implements OnInit{
                         this.results = resultsGet;
                         this.closeModal.close();
                     });
+                    document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth', block: 'end' });
                 }
             });
         }
