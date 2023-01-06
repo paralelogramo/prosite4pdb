@@ -151,10 +151,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 						condition1 += "AND amino1_symbol !='"+amino+"' ";
 					});
 					condition1 += ")";
-					var aminoAcids2 = this.lastAmino.replace('{', '').replace('}', '').split('');
+					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "AND amino2_symbol !='"+amino+"' ";
 					});
 					condition2 += ")";
@@ -178,10 +178,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					aminoAcids1.forEach(amino => {
 						condition1 += "AND amino1_symbol !='"+amino+"' ";
 					});
-					var aminoAcids2 = this.lastAmino.replace('[', '').replace(']', '').split('');
+					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "OR amino2_symbol ='"+amino+"' ";
 					});
 					condition2 += ")";
@@ -251,10 +251,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 						condition1 += "OR amino1_symbol ='"+amino+"' ";
 					});
 					condition1 += ")";
-					var aminoAcids2 = this.lastAmino.replace('{', '').replace('}', '').split('');
+					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "AND amino2_symbol !='"+amino+"' ";
 					});
 					condition2 += ")";
@@ -278,10 +278,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					aminoAcids1.forEach(amino => {
 						condition1 += "OR amino1_symbol ='"+amino+"' ";
 					});
-					var aminoAcids2 = this.lastAmino.replace('[', '').replace(']', '').split('');
+					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "OR amino2_symbol ='"+amino+"' ";
 					});
 					condition2 += ")";
@@ -335,10 +335,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
 
 					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids2 = this.lastAmino.replace('{', '').replace('}', '').split('');
+					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "AND amino2_symbol !='"+amino+"' ";
 					});
 					condition2 += ")";
@@ -356,10 +356,10 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
 
 					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids2 = this.lastAmino.replace('[', '').replace(']', '').split('');
+					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids.forEach(amino => {
+					aminoAcids2.forEach(amino => {
 						condition2 += "OR amino2_symbol a='"+amino+"' ";
 					});
 					condition2 += ")";
