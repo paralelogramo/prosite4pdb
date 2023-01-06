@@ -178,6 +178,7 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					aminoAcids1.forEach(amino => {
 						condition1 += "AND amino1_symbol !='"+amino+"' ";
 					});
+					condition1 += ")";
 					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol ='"+first2+"' ";
@@ -278,6 +279,7 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 					aminoAcids1.forEach(amino => {
 						condition1 += "OR amino1_symbol ='"+amino+"' ";
 					});
+					condition1 += ")";
 					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
 					var first2 = aminoAcids2.shift();
 					var condition2 = "(amino2_symbol ='"+first2+"' ";
@@ -410,7 +412,8 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#aminorepetition.
 	exitAminorepetition(ctx) {
-		console.log("Repeticion: " + ctx.getText())
+		console.log("Repeticion Amino: " + ctx.getText().split('(')[0])
+		console.log("Repeticion Numeros: " + ctx.getText().split('(')[1].replace(')', ''))
 	}
 
 
