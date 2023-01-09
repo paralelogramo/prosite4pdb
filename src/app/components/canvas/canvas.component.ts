@@ -139,9 +139,6 @@ export class CanvasComponent implements OnInit{
         this.graph
         (document.getElementById('canvasGraph'))
         .graphData(data)
-        // .linkDirectionalParticleSpeed(0.02)
-        // .linkDirectionalParticles(3)
-        // .linkDirectionalParticleColor((link:any) => link.color = '#006CA8')
         .linkDirectionalArrowLength(2)
         .linkDirectionalArrowColor((link:any) => link.color = '#006CA8')
         .linkCurvature('curvature')
@@ -347,7 +344,6 @@ export class CanvasComponent implements OnInit{
                 }
                 else {
                     this.correctInput = true;
-                    // este es el verdadero, aqui actualizar el canva
                     this.refreshCanvas(next)
                 }
             }
@@ -540,7 +536,7 @@ export class CanvasComponent implements OnInit{
             pattern += protein[index]
         });
         console.log(pattern)
-
+        this.router.navigateByUrl('/prosite4pdb/pattern/'+pattern)
     }
 
     // Refresh canvas when change the input
