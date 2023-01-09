@@ -4,7 +4,7 @@ export enum AminosNames {
     ASN = 'Asparagine (ASN)',
     ASP = 'Aspartic Acid (ASP)',
     CYS = 'Cysteine (CYS)',
-    GLN = 'Glutamine (GL)',
+    GLN = 'Glutamine (GLN)',
     GLU = 'Glutamic Acid (GLU)',
     GLY = 'Glycine (GLY)',
     HIS = 'Histidine (HIS)',

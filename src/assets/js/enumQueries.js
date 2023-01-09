@@ -45,7 +45,7 @@ export default function getQuery(littleQueries) {
     var index = 1;
     if (littleQueries.length > 1){
         var lastQuery = littleQueries.pop();
-        var init = ` SELECT protein_id
+        var init = ` SELECT *
         FROM (
             (
         `;

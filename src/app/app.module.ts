@@ -20,8 +20,10 @@ import { ModalSelectAminoComponent } from './components/modals/modal-select-amin
 import { CanvasRightClickMenuComponent } from './components/modals/canvas-right-click-menu/canvas-right-click-menu.component';
 import { ButtonRightClickMenuComponent } from './components/modals/button-right-click-menu/button-right-click-menu.component';
 import { HowToUseComponent } from './components/modals/how-to-use/how-to-use.component';
-import { PatternComponent } from './components/modals/pattern/pattern.component';
+import { PatternComponent } from './pages/pattern/pattern.component';
 import { AboutComponent } from './components/modals/about/about.component';
+import { SeeProtein3dComponent } from './components/modals/see-protein3d/see-protein3d.component';
+import { ProteinComponent } from './pages/protein/protein.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { AboutComponent } from './components/modals/about/about.component';
     ButtonRightClickMenuComponent,
     HowToUseComponent,
     PatternComponent,
-    AboutComponent
+    AboutComponent,
+    SeeProtein3dComponent,
+    ProteinComponent
   ],
   imports: [
     BrowserModule,

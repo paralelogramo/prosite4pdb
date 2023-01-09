@@ -15,13 +15,7 @@ import * as fg from 'force-graph';
 import { ModalSelectAminoComponent } from '../modals/modal-select-amino/modal-select-amino.component';
 import { pairwise, startWith } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
-
-interface Result {
-    id: string;
-    title: string;
-    classification: string;
-    organism: string;
-}
+import { Router } from '@angular/router';
 
 interface Data {
     nodes: any[];
@@ -40,7 +34,7 @@ export class CanvasComponent implements OnInit{
     searchTerm: string;
     page = 1;
     pageSize = 10;
-    results: Result[] = [];
+    results: any[] = [];
     collectionSize: number = this.results.length;
     comQuery: any;
     correctInput: boolean = false;
@@ -64,33 +58,46 @@ export class CanvasComponent implements OnInit{
     imgGroupUrl= '../../../../assets/graphIcons/Group.png';
     imgExceptUrl= '../../../../assets/graphIcons/Except.png';
 
-    list_aminos: AminoGraph[] = [{
-        id: 1,
-        x: 0,
-        fx: 0,
-        y: 0,
-        fy: 0,
-        img: this.imgAminoUrl,
-        isGroup: false,
-        isExcept: false,
-        aminos: ['ALA'],
-    },
-    {
-        id: 2,
-        x: 20,
-        fx: 20,
-        y: 0,
-        fy: 0,
-        img: this.imgAminoUrl,
-        isGroup: false,
-        isExcept: false,
-        aminos: ['ALA'],
-    },
+    list_aminos: AminoGraph[] = [
+        // {
+        // id: 1,
+        // x: 0,
+        // fx: 0,
+        // y: 0,
+        // fy: 0,
+        // img: this.imgAminoUrl,
+        // isGroup: false,
+        // isExcept: false,
+        // aminos: ['ALA'],
+        // },
+        // {
+        // id: 2,
+        // x: 20,
+        // fx: 20,
+        // y: 0,
+        // fy: 0,
+        // img: this.imgAminoUrl,
+        // isGroup: false,
+        // isExcept: false,
+        // aminos: ['ALA'],
+        // },
+        // {
+        // id: 3,
+        // x: 40,
+        // fx: 40,
+        // y: 0,
+        // fy: 0,
+        // img: this.imgAminoUrl,
+        // isGroup: true,
+        // isExcept: false,
+        // aminos: ['ALA','VAL','HIS','GLY'],
+        // },
     ];
     // list_aminos: AminoGraph[] = [];
 
     links = [
-        { source: 1, target: 2, text: "X(2)", curvature : 0.0}
+        // { source: 1, target: 2, text: "X(2)", curvature : 0.0},
+        // { source: 2, target: 3, text: "Next", curvature : 0.0}
     ];
     // links: LinkGraph[] = [];
 
@@ -116,7 +123,8 @@ export class CanvasComponent implements OnInit{
         private aminoService: AminoService,
         private modalService: NgbModal,
         private ngxNotifierService: NgxNotifierService,
-        private scroller: ViewportScroller
+        private scroller: ViewportScroller,
+        private router: Router
     ){}
 
     ngOnInit(): void {
@@ -131,9 +139,11 @@ export class CanvasComponent implements OnInit{
         this.graph
         (document.getElementById('canvasGraph'))
         .graphData(data)
-        .linkDirectionalParticleSpeed(0.01)
-        .linkDirectionalParticles(3)
-        .linkDirectionalParticleColor((link:any) => link.color = '#006CA8')
+        // .linkDirectionalParticleSpeed(0.02)
+        // .linkDirectionalParticles(3)
+        // .linkDirectionalParticleColor((link:any) => link.color = '#006CA8')
+        .linkDirectionalArrowLength(2)
+        .linkDirectionalArrowColor((link:any) => link.color = '#006CA8')
         .linkCurvature('curvature')
         .nodeLabel('aminos')
         .enableNodeDrag(true)
@@ -256,17 +266,13 @@ export class CanvasComponent implements OnInit{
             this.nodeContextMenu = true;
         })
         this.onResize(null);
-    }
-
-    nodePaint({ id, x, y }, ctx) {
-        ctx.fillStyle = 'red';
-        [
-          () => {
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
-            ctx.fill();
-        },
-        ][id%1]();
+        setInterval(() => {
+            const { nodes, links } = this.graph.graphData();
+            this.graph.graphData({
+              nodes: [...nodes],
+              links: [...links]
+            });
+          }, 50);
     }
 
     // Falta implementar
@@ -320,71 +326,29 @@ export class CanvasComponent implements OnInit{
         }
         this.nodeContextMenu = false;
     }
-    
-    getAminoIcon(type: string){
-        switch (type) {
-            case 'ALA':
-                return Aminos.ALA;
-            case 'ARG':
-                return Aminos.ARG;
-            case 'ASN':
-                return Aminos.ASN;
-            case 'ASP':
-                return Aminos.ASP;
-            case 'CYS':
-                return Aminos.CYS;
-            case 'GLN':
-                return Aminos.GLN;
-            case 'GLU':
-                return Aminos.GLU;
-            case 'GLY':
-                return Aminos.GLY;
-            case 'HIS':
-                return Aminos.HIS;
-            case 'ILE':
-                return Aminos.ILE;
-            case 'LEU':
-                return Aminos.LEU;
-            case 'LYS':
-                return Aminos.LYS;
-            case 'MET':
-                return Aminos.MET;
-            case 'PHE':
-                return Aminos.PHE;
-            case 'PRO':
-                return Aminos.PRO;
-            case 'SER':
-                return Aminos.SER;
-            case 'THR':
-                return Aminos.THR;
-            case 'TRP':
-                return Aminos.TRP;
-            case 'TYR':
-                return Aminos.TYR;
-            case 'VAL':
-                return Aminos.VAL;
-            default:
-                return Aminos.ANY;
-        }
-    }
-
-    onResize(event: any) {
-        let divElement = document.getElementById('canvasID');
-        this.graph.width(divElement.offsetWidth-4);
-        this.graph.height(divElement.offsetHeight-4);
-    }
 
     onChangeInput(){
         this.inputPatternForm.get('pattern').valueChanges
         .pipe(startWith(null), pairwise())
         .subscribe(([prev, next]: [any, any]) => {
             let res = Parser(next.toUpperCase() + '.');
+            if(next == ''){
+                this.graph.graphData({
+                    nodes: [],
+                    links: []
+                })
+            }
             if(res.message === 'success'){
-                if(next.toUpperCase().split('-').length == 1){
+                if (next.toUpperCase().split('-').length == 1) {
+                    this.refreshCanvas(next)
+                }
+                if(next.toUpperCase().split('-').length == 1 && !next.toUpperCase().includes('(') && !next.toUpperCase().includes(')')){
                     this.correctInput = false;
                 }
                 else {
                     this.correctInput = true;
+                    // este es el verdadero, aqui actualizar el canva
+                    this.refreshCanvas(next)
                 }
             }
             else{
@@ -399,13 +363,7 @@ export class CanvasComponent implements OnInit{
         this.page = event;
         this.aminoService.getResultsByPattern(this.comQuery.query, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
             data.forEach(res => {
-                let id = res.id;
-                let title = res.title;
-                let classification = res.classification;
-                let organism = res.organism;
-                
-                let protein = {id: id, title: title, classification: classification, organism: organism};
-                resultsGet.push(protein);
+                resultsGet.push(res);
             });
             this.results = [];
             this.results = resultsGet;
@@ -473,7 +431,69 @@ export class CanvasComponent implements OnInit{
                 break;
         }
         return node
-    }
+    } 
+
+    genNodeWithAminos(id: number, coords: any, type: string, aminos?: string[]) {
+        let node: AminoGraph;
+        switch (type) {
+            case 'amino':
+                node = {
+                    id: id,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: false,
+                    aminos: aminos
+                };
+                break;
+
+            case 'any':
+                node = {
+                    id: id,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: false,
+                    aminos: ['ANY']
+                };
+                break;
+
+            case 'group':
+                node = {
+                    id: id,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: true,
+                    isExcept: false,
+                    aminos: aminos
+                };
+                break;
+
+            case 'except':
+                node = {
+                    id: id,
+                    x: coords.x,
+                    fx: coords.x,
+                    y: coords.y,
+                    fy: coords.y,
+                    img: this.imgAminoUrl,
+                    isGroup: false,
+                    isExcept: true,
+                    aminos: aminos
+                };
+                break;
+        }
+        return node
+    } 
 
     searchFirstGroupPattern(content) {
         this.page = 1;
@@ -501,13 +521,7 @@ export class CanvasComponent implements OnInit{
                     this.closeModal.result.then((result) => {}, (reason) => {});
                     this.aminoService.getResultsByPattern(this.comQuery.query, this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
                         data.forEach(res => {
-                            let id = res.id;
-                            let title = res.title;
-                            let classification = res.classification;
-                            let organism = res.organism;
-                            
-                            let protein = {id: id, title: title, classification: classification, organism: organism};
-                            resultsGet.push(protein);
+                            resultsGet.push(res);
                         });
                         this.results = resultsGet;
                         this.closeModal.close();
@@ -518,7 +532,204 @@ export class CanvasComponent implements OnInit{
         }
     }
 
-    openProteinPDB(id: string) {
-        window.open('https://www.rcsb.org/structure/' + id);
+    openProteinPDB(protein: any) {
+        // window.open('https://www.rcsb.org/structure/' + protein.id);
+        var keys = Object.keys(protein).filter(string => string.includes('symbol')).sort();
+        var pattern = ''
+        keys.forEach(index => {
+            pattern += protein[index]
+        });
+        console.log(pattern)
+
+    }
+
+    // Refresh canvas when change the input
+    refreshCanvas(pattern: string){
+        var distance = 20
+        var index = 1;
+        var nodeList = [];
+        var aminos = pattern.split('-');
+        aminos.forEach(amino => {
+            amino = amino.toUpperCase();
+            var repetition = 1;
+            if(amino.includes('(') && amino.includes(')')){
+                var parts = amino.split('(');
+                repetition = Number(parts[1].replaceAll(')',''));
+                amino = parts[0];
+            }
+            //
+            for (let i = 0; i < repetition; i++) {
+                if (amino.includes('[') && amino.includes(']')) {
+                    var aminoList = amino.replaceAll('[','').replaceAll(']','').split('');
+                    var aminoThreeList = aminoList.map(a => this.getAminoOneLetter(a));
+                    var node = this.genNodeWithAminos(nodeList.length+1, {x: index*distance, y: 0}, 'group', aminoThreeList);
+                    var currentX = index*10;
+                    var currentY = 0
+                    try {
+                        currentX = this.graph.graphData().nodes.find(n => n.id == node.id).x
+                        currentY = this.graph.graphData().nodes.find(n => n.id == node.id).y
+                        node.fx = currentX;
+                        node.fy = currentY;   
+                    } catch (e) {}
+                    nodeList.push(node);
+                    index += 1;
+                }
+                else if (amino.includes('{') && amino.includes('}')){
+                    var aminoList = amino.replaceAll('{','').replaceAll('}','').split('');
+                    var aminoThreeList = aminoList.map(a => this.getAminoOneLetter(a));
+                    var node = this.genNodeWithAminos(nodeList.length+1, {x: index*distance, y: 0}, 'except', aminoThreeList);
+                    var currentX = index*10;
+                    var currentY = 0
+                    try {
+                        currentX = this.graph.graphData().nodes.find(n => n.id == node.id).x
+                        currentY = this.graph.graphData().nodes.find(n => n.id == node.id).y
+                        node.fx = currentX;
+                        node.fy = currentY;   
+                    } catch (e) {}
+                    nodeList.push(node);
+                    index += 1;
+                }
+                else {
+                    if (amino == 'X') {
+                        var node = this.genNodeWithAminos(nodeList.length+1, {x: index*distance, y: 0}, 'any');
+                        var currentX = index*10;
+                        var currentY = 0
+                        try {
+                            currentX = this.graph.graphData().nodes.find(n => n.id == node.id).x
+                            currentY = this.graph.graphData().nodes.find(n => n.id == node.id).y
+                            node.fx = currentX;
+                            node.fy = currentY;   
+                        } catch (e) {}
+                        nodeList.push(node);
+                        index += 1;
+                    } else {
+                        var node = this.genNodeWithAminos(nodeList.length+1, {x: index*distance, y: 0}, 'amino', [this.getAminoOneLetter(amino)]);
+                        var current;
+                        try {
+                            current = this.graph.graphData().nodes.find(n => n.id == node.id)
+                            node.fx = current.x;
+                            node.x = current.x;
+                            node.fy = current.y;
+                            node.y = current.y;
+                        } catch (e) {}
+                        nodeList.push(node);
+                        index += 1;
+                    }
+                }
+            }
+        });
+        this.graph.graphData().nodes = nodeList;
+        // CREAR LINKS
+        var links = []
+        var i = 1;
+        while (i < nodeList.length) {
+            var link = { source: i, target: i+1, text: "Next", curvature : 0.0};
+            links.push(link);
+            i += 1;
+        }
+        this.graph.graphData().links = links;
+    }
+
+    // Get the img source of amino by the three letter id
+    getAminoIcon(type: string){
+        switch (type) {
+            case 'ALA':
+                return Aminos.ALA;
+            case 'ARG':
+                return Aminos.ARG;
+            case 'ASN':
+                return Aminos.ASN;
+            case 'ASP':
+                return Aminos.ASP;
+            case 'CYS':
+                return Aminos.CYS;
+            case 'GLN':
+                return Aminos.GLN;
+            case 'GLU':
+                return Aminos.GLU;
+            case 'GLY':
+                return Aminos.GLY;
+            case 'HIS':
+                return Aminos.HIS;
+            case 'ILE':
+                return Aminos.ILE;
+            case 'LEU':
+                return Aminos.LEU;
+            case 'LYS':
+                return Aminos.LYS;
+            case 'MET':
+                return Aminos.MET;
+            case 'PHE':
+                return Aminos.PHE;
+            case 'PRO':
+                return Aminos.PRO;
+            case 'SER':
+                return Aminos.SER;
+            case 'THR':
+                return Aminos.THR;
+            case 'TRP':
+                return Aminos.TRP;
+            case 'TYR':
+                return Aminos.TYR;
+            case 'VAL':
+                return Aminos.VAL;
+            default:
+                return Aminos.ANY;
+        }
+    }
+
+    // Map the amino with one letter to three letters
+    getAminoOneLetter(type: string){
+        switch (type) {
+            case 'A':
+                return 'ALA';
+            case 'R':
+                return 'ARG';
+            case 'N':
+                return 'ASN'
+            case 'D':
+                return 'ASP'
+            case 'C':
+                return 'CYS'
+            case 'Q':
+                return 'GLN'
+            case 'E':
+                return 'GLU'
+            case 'G':
+                return 'GLY'
+            case 'H':
+                return 'HIS'
+            case 'I':
+                return 'ILE'
+            case 'L':
+                return 'LEU'
+            case 'K':
+                return 'LYS'
+            case 'M':
+                return 'MET'
+            case 'F':
+                return 'PHE'
+            case 'P':
+                return 'PRO'
+            case 'S':
+                return 'SER'
+            case 'T':
+                return 'THR'
+            case 'W':
+                return 'TRP'
+            case 'Y':
+                return 'TYR'
+            case 'V':
+                return 'VAL'
+            default:
+                return 'ANY'
+        }
+    }
+
+    // Fix size of canvas when resize the browser
+    onResize(event: any) {
+        let divElement = document.getElementById('canvasID');
+        this.graph.width(divElement.offsetWidth-4);
+        this.graph.height(divElement.offsetHeight-4);
     }
 }
