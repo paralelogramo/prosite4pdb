@@ -1,0 +1,23 @@
+.custom-container{
+    height: 95vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.not-found{
+    background-color: red;
+    margin-top: 5%;
+}
+
+.error-404-img{
+    
+}
+
+.error-404-text{
+    justify-content: center;
+}
+
+.ups-text{
+    font-size: 64px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}

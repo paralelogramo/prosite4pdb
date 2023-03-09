@@ -8,6 +8,7 @@
     width: 100%;
     margin-top: 10px;
 }
+
 .canvas{
     border-radius: 10px;
     border: 2px solid #006CA8;
@@ -20,10 +21,10 @@
     border-color: #006CA8;
     border-width: 2px;
     height: 50px;
-    width: 96%;
+    width: 100%;
     font-size: 30px;
     font-family: 'Courier New', Courier, monospace;
-    border-radius: 10px 0px 0px 10px;
+    border-radius: 10px;
 }
 
 .btn-custom{
@@ -191,7 +192,16 @@
     border-radius: 15px;
 }
 
+.contextMenuLink{
+    position: absolute;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 15px;
+}
+
 .canvasGraph{
     position: absolute;
-    z-index: 1;
+    z-index: 0;
 }

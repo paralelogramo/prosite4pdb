@@ -50,7 +50,6 @@ export class ModalSelectAminoComponent implements OnInit {
 
     onChangeOption(){
         this.disabledSave = this.options.filter(option => option.checked).length === 0;
-        console.log(this.disabledSave)
     }
 
     onClose(result: string){

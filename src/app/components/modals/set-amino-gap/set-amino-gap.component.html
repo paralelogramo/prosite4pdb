@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4 class="modal-title col-12 text-center" id="modal-basic-title">Add Amino Gap</h4>
+</div>
+<div class="modal-body">
+    <form [formGroup]="aminoSelect">
+        <div class="row" style="margin: 0px">
+            <div class="col-md-12 justify-content-center align-items-center">
+                <h3>Select Amino Acid</h3>
+            </div>
+            <div class="col-md-12">
+                <select class="form-select" formControlName="aminoOption">
+                    <option value="{{amino}}" *ngFor="let amino on aminoNames">{{amino}}</option>
+                </select>
+            </div>
+            <hr/>
+            <div class="col-md-12 justify-content-center align-items-center">
+                <h3>Select Min Gap</h3>
+            </div>
+            <div class="col-md-12">
+                <input class="form-control" placeholder="Enter the min Gap">
+            </div>
+            <hr/>
+        </div>
+    </form>>
+</div>
+<div class="modal-footer col-12 justify-content-end">
+    <button type="button" class="btn btn-primary" (click)="onClose('save')">
+        Save
+    </button>
+    <button type="button" class="btn btn-outline-primary" (click)="onClose('cancel')">
+        Cancel
+    </button>
+</div>

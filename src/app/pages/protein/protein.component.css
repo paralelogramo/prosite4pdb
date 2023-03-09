@@ -1,0 +1,59 @@
+.basic-info-container {
+    width: 98%;
+    min-height: 90vh;
+    max-height: 100%;
+    border: 2px solid #006CA8;
+    margin: 10px auto auto auto;
+    background-color: rgb(235, 235, 235);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.container3d{
+    min-height: 80vh;
+}
+
+.info-container{
+    display: grid;
+    place-items: center;
+    padding: 20px 0;
+}
+
+.view3D{
+    width: 100%;
+    height: 83vh;
+    position: relative;
+}
+
+.protein-base{
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.id-info{
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 40px;
+}
+
+.title-text{
+    font-size: 22px;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 5px;
+}
+
+.info-text{
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.custom-row{
+    margin-top: 20px;
+}
+
+p{
+    margin: 0px !important;
+}

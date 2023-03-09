@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h4 class="modal-title col-12 text-center" id="modal-basic-title"><b>INFORMATION</b></h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>ID</b></h4>
+                <h5>{{protein.id}}</h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>Title</b></h4>
+                <h5>{{protein.title}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row row-custom">
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>Classification</b></h4>
+                <h5>{{protein.classification}}</h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>Organism</b></h4>
+                <h5>{{protein.organism}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row row-custom">
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>Searched Pattern</b></h4>
+                <h5>{{protein.pattern}}</h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="viewInfo text-center align-middle">
+                <h4><b>Pattern in Protein</b></h4>
+                <h5>{{protein.realPattern}}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer col-12 justify-content-end">
+    <button type="button" class="btn btn-primary" (click)="seeProtein()">
+        See Protein
+    </button>
+    <button type="button" class="btn btn-primary" (click)="seeRealPattern()">
+        See Real Pattern
+    </button>
+    <button type="button" class="btn btn-outline-primary" (click)="onClose('')">
+        Close
+    </button>
+</div>

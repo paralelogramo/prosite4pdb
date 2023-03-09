@@ -21,7 +21,8 @@ export class ButtonRightClickMenuComponent implements OnInit{
     this.optionSelected.emit({
       option: option,
       x: this.x,
-      y: this.y
+      y: this.y,
+      id: this.id
     });
   }
 }

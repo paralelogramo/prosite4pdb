@@ -1,0 +1,15 @@
+.contextmenu{
+    position: absolute;
+    border-radius: 8px;
+    background-color: rgb(235, 235, 235);
+    border-color: #006CA8;
+    width: 16em;
+}
+
+.btn-custom{
+   border-color: #006CA8;
+}
+
+.container-buttons{
+    width: 100%;
+}

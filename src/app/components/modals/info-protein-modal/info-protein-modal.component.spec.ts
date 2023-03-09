@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SeeProtein3dComponent } from './see-protein3d.component';
+import { SeeProtein3dComponent } from './info-protein-modal.component';
 
 describe('SeeProtein3dComponent', () => {
   let component: SeeProtein3dComponent;

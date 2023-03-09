@@ -13,7 +13,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ToolComponent } from './pages/tool/tool.component';
 import { ResultsComponent } from './components/results/results.component';
 import { HttpClientModule } from '@angular/common/http';
-import { TableFilterPipe } from './pipes/table-filter/table-filter-pipe';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgxNotifierModule } from 'ngx-notifier';
 import { ModalSelectAminoComponent } from './components/modals/modal-select-amino/modal-select-amino.component';
@@ -22,8 +21,11 @@ import { ButtonRightClickMenuComponent } from './components/modals/button-right-
 import { HowToUseComponent } from './components/modals/how-to-use/how-to-use.component';
 import { PatternComponent } from './pages/pattern/pattern.component';
 import { AboutComponent } from './components/modals/about/about.component';
-import { SeeProtein3dComponent } from './components/modals/see-protein3d/see-protein3d.component';
+import { InfoProteinModalComponent } from './components/modals/info-protein-modal/info-protein-modal.component';
 import { ProteinComponent } from './pages/protein/protein.component';
+import { LinkRightClickMenuComponent } from './components/modals/link-right-click-menu/link-right-click-menu.component';
+import { SetAminoGapComponent } from './components/modals/set-amino-gap/set-amino-gap.component';
+import { CustomDatePipe } from './pipes/custom-date.pipe';
 
 @NgModule({
   declarations: [
@@ -34,15 +36,17 @@ import { ProteinComponent } from './pages/protein/protein.component';
     FooterComponent,
     ToolComponent,
     ResultsComponent,
-    TableFilterPipe,
     ModalSelectAminoComponent,
     CanvasRightClickMenuComponent,
     ButtonRightClickMenuComponent,
     HowToUseComponent,
     PatternComponent,
     AboutComponent,
-    SeeProtein3dComponent,
-    ProteinComponent
+    InfoProteinModalComponent,
+    ProteinComponent,
+    LinkRightClickMenuComponent,
+    SetAminoGapComponent,
+    CustomDatePipe
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,7 @@ import { ProteinComponent } from './pages/protein/protein.component';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    NgxNotifierModule
+    NgxNotifierModule,
   ],
   providers: [
   ],

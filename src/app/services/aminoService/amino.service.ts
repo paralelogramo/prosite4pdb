@@ -10,13 +10,15 @@ export class AminoService {
 
   	constructor(private http: HttpClient) { }
 
-	getResultsByPattern(query: string, limit: number, offset: number): any {
-		const params = new HttpParams().set('query', query + ' LIMIT ' + limit + ' OFFSET ' + offset)
-		return this.http.get<any>(`${this.host}/getProteinsByPattern`, { params });
+	getResultsByPattern(pattern: string, limit: number, offset: number): any {
+		return this.http.get<any>(`${this.host}/getProteinsByPattern?pattern=${pattern}&limit=${limit}&offset=${offset}`);
 	}
 
-	getTotalResultsByPattern(query: string): any {
-		const params = new HttpParams().set('query', "SELECT COUNT(*) as count FROM ( " + query + " ) AS QT")
-		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern`, { params });
+	getTotalResultsByPattern(pattern: string): any {
+		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern?pattern=${pattern}`);
+	}
+
+	getProteinByID(id: string): any {
+		return this.http.get<any>(`${this.host}/getProteinByID?id=${id}`);
 	}
 }

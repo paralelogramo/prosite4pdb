@@ -13,19 +13,28 @@
         <div id="canvasID" class="canvas" (window:resize)="onResize($event)">
             <div class='canvasGraph' id="canvasGraph">
             </div>
-            <div class="contextMenu" *ngIf="canvasContextMenu==true">
+            <div class="contextMenu" *ngIf="canvasContextMenu">
                 <app-canvas-right-click-menu
                     [x]="canvasContextMenuX"
                     [y]="canvasContextMenuY"
                     (optionSelected)="onCanvasContextMenuOptionSelected($event)"
                 ></app-canvas-right-click-menu>
             </div>
-            <div class="contextMenuNode" *ngIf="nodeContextMenu==true">
+            <div class="contextMenuNode" *ngIf="nodeContextMenu">
                 <app-button-right-click-menu
                     [x]="nodeContextMenuX"
                     [y]="nodeContextMenuY"
+                    [id]="nodeRightClicked.id"
                     (optionSelected)="onNodeContextMenuOptionSelected($event)"
                 ></app-button-right-click-menu>
+            </div>
+            <div class="contextMenuLink" *ngIf="linkContextMenu">
+                <app-link-right-click-menu
+                    [x]="linkContextMenuX"
+                    [y]="linkContextMenuY"
+                    [link]="linkSelected"
+                    (optionSelected)="onLinkContextMenuOptionSelected($event)"
+                ></app-link-right-click-menu>
             </div>
         </div>
         <div class="text-input">
@@ -34,9 +43,6 @@
                     <form [formGroup]="inputPatternForm">
                         <div class="inputWithSufix">
                             <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
-                            <div class="sufix">
-                                <img class="checkInput img-fluid mx-auto d-block" src="../../../assets/input-no-check.png">
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -67,7 +73,7 @@
                             (input)="search($event.target.value)" />
                         </div>
                     </form> -->
-                    <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" />
+                    <!-- <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" /> -->
                 </div>
             </div>
         </div>
@@ -126,9 +132,10 @@
 
 <ng-template #content class="modal-center" let-c="close" let-d="dismiss">
     <div class="modal-body">
-        <h4 class="modal-title col-12 text-center" id="modal-basic-title">Searching Proteins...</h4>
+        <h4 class="modal-title col-12 text-center" id="modal-basic-title">Searching...</h4>
         <div class="div text-center" style="margin-top: 15px;">
-            <img src="../../../assets/molecules.gif" alt="gif-molecules" class="molecules_gif">
+            <img src="../../../assets/loadIcons/{{loadIcon}}.gif" alt="{{loadIcon}}" class="molecules_gif">
+            <p>{{loadMessage}}</p>
         </div>
     </div>
 </ng-template>
