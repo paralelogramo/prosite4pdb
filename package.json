@@ -30,7 +30,7 @@
     "bootstrap": "^5.2.3",
     "force-graph": "^1.42.16",
     "jquery": "^3.6.3",
-    "ngx-device-detector": "^4.0.1",
+    "ngx-device-detector": "^5.0.1",
     "ngx-notifier": "^9.0.0",
     "ngx-toastr": "^16.0.1",
     "rxjs": "~7.5.0",
