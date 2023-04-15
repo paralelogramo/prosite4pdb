@@ -11,10 +11,12 @@ export class AminoService {
   	constructor(private http: HttpClient) { }
 
 	getResultsByPattern(pattern: string, limit: number, offset: number): any {
-		return this.http.get<any>(`${this.host}/getProteinsByPattern?pattern=${pattern}&limit=${limit}&offset=${offset}`);
+		pattern = pattern.replaceAll(",", ";")
+		return this.http.get<any>(`${this.host}/getProteinsByPattern?pattern="${pattern}"&limit=${limit}&offset=${offset}`);
 	}
 
 	getTotalResultsByPattern(pattern: string): any {
+		pattern = pattern.replaceAll(",", ";")
 		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern?pattern=${pattern}`);
 	}
 

@@ -40,6 +40,18 @@ export const amino_any_next_amino_any = `SELECT protein_id,
                                 amino2_number AS amino<<amino_any 2 id>>_number
                                 FROM   next_amino_amino`;
 
+export const amino_gap_amino = `SELECT *, ( Split_part(gap_range_query.amino<<amino2_id>>_id, '_', 3) :: INT - Split_part(gap_range_query.amino<<amino1_id>>_id, '_', 3) :: INT)::INT AS gaprange_<<amino1_id>>_<<amino2_id>>
+                                FROM (
+                                    SELECT * FROM (
+                                        <<big_query>>
+                                    ) AS gapquery
+                                    WHERE  Split_part(gapquery.amino<<amino1_id>>_id, '_', 3) :: INT < Split_part(gapquery.amino<<amino2_id>>_id, '_', 3) :: INT
+                                ) AS gap_range_query
+                                WHERE (
+                                    (Split_part(gap_range_query.amino<<amino2_id>>_id, '_', 3) :: INT - Split_part(gap_range_query.amino<<amino1_id>>_id, '_', 3) ::INT ) >= <<gap_min>> AND
+                                    (Split_part(gap_range_query.amino<<amino2_id>>_id, '_', 3) :: INT - Split_part(gap_range_query.amino<<amino1_id>>_id, '_', 3) ::INT ) <= <<gap_max>>);
+                                )`;
+
 
 export default function getQuery(littleQueries) {
     var index = 1;

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class InfoProteinModalComponent implements OnInit{
     @Input() protein: any;
+    @Input() pattern: any;
     
     constructor(
         public activeModal: NgbActiveModal,
@@ -22,7 +23,7 @@ export class InfoProteinModalComponent implements OnInit{
     }
 
     seeProtein(){
-        this.router.navigateByUrl('prosite4pdb/protein/' + this.protein.id);
+        this.router.navigateByUrl('prosite4pdb/protein/' + this.protein.id + '/' + this.pattern);
         this.activeModal.close('redirect_protein');
     }
 

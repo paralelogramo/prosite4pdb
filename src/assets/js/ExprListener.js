@@ -5,15 +5,26 @@ import getQuery from './enumQueries';
 import { amino_any_next_amino,
 		 amino_any_next_amino_any,
 		 amino_next_amino,
-		 amino_next_amino_any
+		 amino_next_amino_any,
+		 amino_gap_amino
 		} from './enumQueries';
 import { setBigQuery } from './catchElements';
+
+class repExt {
+	constructor(last, next, min, max) {
+		this.last = last;
+		this.next = next;
+		this.min = min;
+		this.max = max;
+	}
+}
 
 // This class defines a complete listener for a parse tree produced by ExprParser.
 export default class ExprListener extends antlr4.tree.ParseTreeListener {
 	lastAmino = "";
 	index = 0;
 	queries = [];
+	repetitions = [];
 
 	// Enter a parse tree produced by ExprParser#pattern.
 	enterPattern(ctx) {
@@ -25,6 +36,18 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 		var completeQuery = `
 		SELECT id, title, classification, organism, Q.* FROM (
 			`+ bigQuery + `) AS Q NATURAL JOIN protein WHERE protein_id=id`;
+
+		// Check repetitions
+		this.repetitions.forEach(rep => {
+			var query = amino_gap_amino;
+			query = query.replaceAll('<<amino1_id>>', rep.last.toString());
+			query = query.replaceAll('<<amino2_id>>', rep.next.toString());
+			query = query.replaceAll('<<gap_min>>', rep.min.toString());
+			query = query.replaceAll('<<gap_max>>', rep.max.toString());
+			completeQuery = query.replaceAll('<<big_query>>', completeQuery);
+		});
+
+
 		setBigQuery(completeQuery);
 	}
 
@@ -45,6 +68,7 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 	// Exit a parse tree produced by ExprParser#aminoclause.
 	exitAminoclause(ctx) {
 		// First check the type of amino acid: can be unique or group or except.
+		console.log(ctx.getText());
 		if (this.lastAmino == "") {
 			this.lastAmino = ctx.getText()
 			this.index += 1;
@@ -765,7 +789,11 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#aminorepetitionextension.
 	exitAminorepetitionextension(ctx) {
-		console.log("Repeticion Extension: " + ctx.getText())
+		var components = ctx.getText().split('(');
+		var minmax = components[1].replace(')', '').split(',');
+
+		var rep = new repExt(this.index, this.index + 1, minmax[0], minmax[1]);
+		this.repetitions.push(rep);
 	}
 
 

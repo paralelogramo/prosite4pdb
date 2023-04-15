@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/prosite4pdb/tool', pathMatch: 'full' },
   { path: 'prosite4pdb/tool', component: ToolComponent},
   { path: 'prosite4pdb/pattern/:pattern', component: PatternComponent },
-  { path: 'prosite4pdb/protein/:protein', component: ProteinComponent},
+  { path: 'prosite4pdb/protein/:protein/:pattern', component: ProteinComponent},
   { path: '**', component: NotfoundComponent }
 ];
 

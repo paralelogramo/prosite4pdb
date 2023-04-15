@@ -5,6 +5,8 @@ import * as $3Dmol from '3dmol';
 import { RSCBService } from 'src/app/services/rscbService/rscb.service';
 import { Protein } from 'src/app/models/protein.model';
 import { AminoService } from 'src/app/services/aminoService/amino.service';
+import { RGBAFormat } from '3dmol/build/types/WebGL';
+import { chains } from '3dmol';
 
 @Component({
   selector: 'app-protein',
@@ -15,6 +17,9 @@ export class ProteinComponent implements OnInit{
 
     protein: Protein = new Protein();
     viewerRef: any;
+
+    rotationChecked: boolean = false;
+    labelChecked: boolean = false;
     
     constructor(
         private rscbService: RSCBService,
@@ -49,16 +54,115 @@ export class ProteinComponent implements OnInit{
                     () => {
                     }
                 )
-            });
+            }
+        );
+
         var viewer = $3Dmol.createViewer($("#view3D"));
         this.viewerRef = viewer;
-        $3Dmol.download("pdb:"+this.route.snapshot.paramMap.get('protein'),viewer,{multimodel:true, frames:true, willReadFrequently: true },function(){
-            viewer.setStyle({}, {cartoon:{color:'spectrum'}});
-            viewer.setBackgroundColor(0xebebeb);
-            viewer.rotate(1,'x');
-            viewer.render();
-        });
+        viewer.setConfig({ route: this.route.snapshot.paramMap.get('pattern') });
+        $3Dmol.download(
+            "pdb:"+this.route.snapshot.paramMap.get('protein'),
+            viewer,
+            {multimodel:false, frames:true, willReadFrequently: true},
+            function(){
+                viewer.setStyle({}, { stick: { color: 'gray' }, });
+                // viewer.setClickable({}, true, function(atom) {
+                //     console.log(atom)
+                // });
+                viewer.setBackgroundColor(0xebebeb, null);
+                viewer.rotate(1,'x');
 
+                var atoms = viewer.selectedAtoms({})
+                    .map(a => {
+                        var resn
+                        switch (a.resn) {
+                            case 'ALA':
+                                resn = 'A';;
+                                break;
+                            case 'ARG':
+                                resn = 'R';;
+                                break;
+                            case 'ASN':
+                                resn = 'N';
+                                break;
+                            case 'ASP':
+                                resn = 'D';
+                                break;
+                            case 'CYS':
+                                resn = 'C';
+                                break;
+                            case 'GLN':
+                                resn = 'Q';
+                                break;
+                            case 'GLU':
+                                resn = 'E';
+                                break;
+                            case 'GLY':
+                                resn = 'G';
+                                break;
+                            case 'HIS':
+                                resn = 'H';
+                                break;
+                            case 'ILE':
+                                resn = 'I';
+                                break;
+                            case 'LEU':
+                                resn = 'L';
+                                break;
+                            case 'LYS':
+                                resn = 'K';
+                                break;
+                            case 'MET':
+                                resn = 'M';
+                                break;
+                            case 'PHE':
+                                resn = 'F';
+                                break;
+                            case 'PRO':
+                                resn = 'P';
+                                break;
+                            case 'SER':
+                                resn = 'S';
+                                break;
+                            case 'THR':
+                                resn = 'T';
+                                break;
+                            case 'TRP':
+                                resn = 'W';
+                                break;
+                            case 'TYR':
+                                resn = 'Y';
+                                break;
+                            case 'VAL':
+                                resn = 'V';
+                                break;
+                            default:
+                                resn = 'X';
+                                break
+                        }
+                        return ({ resn: resn, resi: a.resi })
+                    })
+                    .filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.resn === value.resn && t.resi === value.resi
+                        )));
+                var aminos = atoms.map(a => a.resn).join('');
+                var resids = atoms.map(a => a.resi);
+
+                var route = viewer.getConfig().route;
+
+                var indexes = [...aminos.matchAll(new RegExp(route, 'gi'))].map(a => a.index)
+
+
+                indexes.forEach(index => {
+                    for (let i = 0; i < route.length; i++) {
+                        viewer.setStyle({ resi: resids[index+i]}, { stick: { color: 'red' }, });
+                    } 
+                });
+
+                viewer.render();
+            }
+        );
     }
 
     setAuthor(authors: any) {
@@ -90,16 +194,27 @@ export class ProteinComponent implements OnInit{
         this.viewerRef.render();
     }
 
-    onChangeRotation(event: any) {
-        this.viewerRef.spin('y', +event.target.checked/2);
+    onChangeRotation() {
+        this.rotationChecked = !this.rotationChecked;
+        this.viewerRef.spin('y', +this.rotationChecked/2);
         this.viewerRef.render();
     }
 
-    onChangeLabel(event: any) {
-        if (event.target.checked)
-            this.viewerRef.addResLabels({hetflag:false}, {font: 'Arial', fontSize: 16, fontColor:'black',showBackground:false});
+    onChangeLabel() {
+        this.labelChecked = !this.labelChecked;
+        if (this.labelChecked)
+            this.viewerRef.addResLabels({hetflag:false}, {font: 'Arial', fontSize: 18, fontColor:'white',showBackground:true,backgroundColor:'black',backgroundOpacity:0.5});
         else
             this.viewerRef.removeAllLabels();
         this.viewerRef.render();
+    }
+
+    onChangeInformation() {
+        // crear un contenedor de la informacion.
+    }
+
+    changeTab(tab: string) {
+        console.log(tab)
+        // do something
     }
 }

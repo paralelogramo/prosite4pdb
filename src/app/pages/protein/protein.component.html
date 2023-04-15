@@ -2,135 +2,54 @@
     <div class="navbar-container">
         <app-navbar></app-navbar>
     </div>
-    <div class="basic-info-container2">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="basic-info-container">
-                    <div class="container3d d-flex justify-content-center align-items-center">
-                        <div id="view3D" class="view3D" data-ui='true'></div>
-                    </div>
-                    <div class="buttons-container">
-                        <div class="row row-custom">
-                            <div class="col-md-3">
-                                <div class="textSelect">
-                                    <p>Color</p>
-                                </div>
-                                <div class="button-group">
-                                    <select class="form-select" aria-label="Default select example"
-                                        (change)="onChangeSelect($event.target)">
-                                        <option value="cartoon">Cartoon</option>
-                                        <option value="stick">Stick</option>
-                                        <option value="line">Line</option>
-                                        <option value="cross">Cross</option>
-                                        <option value="sphere">Sphere</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="text-rotation">
-                                    <p>Rotation</p>
-                                </div>
-                                <div class="button-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="rotationCheck"
-                                            (change)="onChangeRotation($event)">
-                                        <label class="form-check-label" for="rotationCheck">
-                                            Activate Rotation
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="text-rotation">
-                                    <p>Residues Label</p>
-                                </div>
-                                <div class="button-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="residuesCheck"
-                                            (change)="onChangeLabel($event)">
-                                        <label class="form-check-label" for="residuesCheck">
-                                            Show Residues
-                                        </label>
-                                    </div>
-                                </div>
+    <div class="protein-container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <div class="row basic-info-container">
+                    <!-- <div class="col-md-2">
+                        <div class="buttons-container">
+                            <div class="accordion-container">
+                                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                                    <ngb-panel title="Simple">
+                                        <ng-template ngbPanelContent>
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+                                            officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3
+                                            wolf
+                                            moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil
+                                            anim
+                                            keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+                                            butcher
+                                            vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+                                            haven't
+                                            heard of them accusamus labore sustainable VHS.
+                                        </ng-template>
+                                    </ngb-panel>
+                                    <ngb-panel>
+                                        <ng-template ngbPanelTitle>
+                                            <span>&#9733; <b>Fancy</b> title &#9733;</span>
+                                        </ng-template>
+                                        <ng-template ngbPanelContent>
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+                                            officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3
+                                            wolf
+                                            moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil
+                                            anim
+                                            keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+                                            butcher
+                                            vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+                                            haven't
+                                            heard of them accusamus labore sustainable VHS.
+                                        </ng-template>
+                                    </ngb-panel>
+                                </ngb-accordion>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="basic-info-container info-container">
-                    <div class="row text-center">
-                        <p class="id-info">{{protein.id}}</p>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <p class="title-text">Title</p>
-                        <p class="info-text">{{protein.title}}</p>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <div class="col-md-6">
-                            <p class="title-text">Classification</p>
-                            <p class="info-text">{{protein.classification}}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="title-text">Organism</p>
-                            <p class="info-text">{{protein.organism}}</p>
+                    </div> -->
+                    <div class="col-md-12">
+                        <div class="container3d d-flex justify-content-center align-items-center">
+                            <div id="view3D" class="view3D" data-ui='true'></div>
                         </div>
                     </div>
-
-                    <div class="row custom-row text-center">
-                        <div class="col-md-6">
-                            <p class="title-text">Deposited</p>
-                            <p class="info-text">{{protein.deposited | customDate}}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="title-text">Released</p>
-                            <p class="info-text">{{protein.released | customDate}}</p>
-                        </div>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <p class="title-text">Authors</p>
-                        <p class="info-text">{{protein.authors}}</p>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <p class="title-text">Method</p>
-                        <p class="info-text">{{protein.method}}</p>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <div class="col-md-4">
-                            <p class="title-text">Resolution</p>
-                            <p class="info-text">{{protein.resolution}} Å</p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="title-text">R Value Free</p>
-                            <p class="info-text">{{protein.rvaluefree}}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="title-text">R Value Work</p>
-                            <p class="info-text">{{protein.rvaluework}}</p>
-                        </div>
-                    </div>
-
-                    <div class="row custom-row text-center">
-                        <div class="col-md-4">
-                            <p class="title-text">Clashscore</p>
-                            <p class="info-text">{{protein.clashscore}}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="title-text">Ramachandran</p>
-                            <p class="info-text">{{protein.ramachandran}}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="title-text">Sidechain</p>
-                            <p class="info-text">{{protein.sidechain}}</p>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>

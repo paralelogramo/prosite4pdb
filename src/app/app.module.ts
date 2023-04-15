@@ -26,6 +26,7 @@ import { ProteinComponent } from './pages/protein/protein.component';
 import { LinkRightClickMenuComponent } from './components/modals/link-right-click-menu/link-right-click-menu.component';
 import { SetAminoGapComponent } from './components/modals/set-amino-gap/set-amino-gap.component';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
+import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap/min-max-gap.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
     ProteinComponent,
     LinkRightClickMenuComponent,
     SetAminoGapComponent,
-    CustomDatePipe
+    CustomDatePipe,
+    MinMaxGapComponent
   ],
   imports: [
     BrowserModule,

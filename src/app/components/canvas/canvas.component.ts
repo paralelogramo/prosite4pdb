@@ -17,6 +17,7 @@ import { InfoProteinModalComponent } from '../modals/info-protein-modal/info-pro
 import { find, pairwise, startWith } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
+import { MinMaxGapComponent } from '../modals/min-max-gap/min-max-gap/min-max-gap.component';
 
 interface Data {
     nodes: any[];
@@ -252,9 +253,19 @@ export class CanvasComponent implements OnInit{
                 }
 
                 var link = { source: this.nodeSelected, target: node, text: this.actionClicked };
-                this.actionClicked = '';
+                if (this.actionClicked == 'Gap') {
+                    let minmax = this.modalService.open(MinMaxGapComponent, { centered: true, size: 'sm' });
+                    console.log(minmax.componentInstance.data)
+                }
+
+                this.actionClicked = ''; // <- HERE GO THE MIN AND MAX OF THE GAP
                 this.nodeSelected = null;
                 this.graph.graphData().links.push(link);
+
+                // MAKE THE COUNT OF LINKS AND NODES
+                // IF NODES = LINKS - 1 CHECK THE ORDER
+                // GET THE FIRST NODE AND CONSTRUCT THE TEXT
+                this.refreshText();
                 return
             }
 
@@ -320,6 +331,19 @@ export class CanvasComponent implements OnInit{
           }, 50);
     }
 
+    refreshText(){
+        var links = this.graph.graphData().links;
+        var nodes = this.graph.graphData().nodes;
+        
+        if(nodes.length == links.length + 1){
+            
+            // let first: number = this.graph.graphData().links.filter(( node ) => { if node.source })
+            // console.log(this.graph.graphData().links)
+        }
+
+        return
+    }
+
     onCanvasContextMenuOptionSelected(event: any){
         if(event.option == 'fit'){
             this.graph.zoomToFit();
@@ -347,8 +371,7 @@ export class CanvasComponent implements OnInit{
                 break;
 
             case 'gap':
-                this.actionClicked = 'X(2)';
-                this.closeModalAminoSelect = this.modalService.open(ModalSelectAminoComponent, {size: 'md' }); 
+                this.actionClicked = 'Gap';
                 break;
             case 'delete':
 
@@ -378,8 +401,6 @@ export class CanvasComponent implements OnInit{
                         return false;
                     }
                 })
-                // Falta implementar sincronizacion de texto
-                this.onLinkChange();
                 break;
             default:
                 break;
@@ -493,6 +514,9 @@ export class CanvasComponent implements OnInit{
         let resultsGet = [];
         let pattern = this.inputPatternForm.value.pattern.toUpperCase();
         this.comQuery = Parser(pattern+'.');
+        
+        // console.log(this.comQuery);
+
         if(this.comQuery.message !== 'success') {
             this.ngxNotifierService.createToast(this.comQuery.message, 'danger', 3000);
         }
@@ -548,9 +572,9 @@ export class CanvasComponent implements OnInit{
         keys.forEach(index => {
             realPattern += protein[index]+'-';
         });
-
         protein.realPattern = realPattern.slice(0,-1);
         this.closeModalSelectResult.componentInstance.protein = protein;
+        this.closeModalSelectResult.componentInstance.pattern = realPattern.replaceAll('-', '');
     }
 
     // Refresh canvas when change the input
@@ -559,6 +583,22 @@ export class CanvasComponent implements OnInit{
         var distanceY = 0;
         var nodeList = [];
         var aminos = pattern.split('-');
+
+        // THIS PART WILL DISSAPEAR AFTER THE UPDATE OF THE GRAMMAR
+        if ((aminos[0].includes('(') && aminos[0].includes(')') && aminos[0].includes(',')) || (aminos[aminos.length - 1].includes('(') && aminos[aminos.length - 1].includes(')') && aminos[aminos.length - 1].includes(','))) {
+            this.correctInput = false;
+            return
+        }
+        aminos.forEach((amino, i) => {
+            console.log(i)
+            if (amino.includes('(') && amino.includes(')') && amino.includes(',') && amino[0].toLowerCase() != 'x') {
+                console.log('entra aca 2')
+                this.correctInput = false;
+                return
+            }
+        });
+        // END OF THE PART THAT WILL DISSAPEAR
+
         aminos.forEach(amino => {
             amino = amino.toUpperCase();
             var repetition = 1;

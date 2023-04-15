@@ -1,7 +1,7 @@
 .basic-info-container {
     width: 98%;
-    min-height: 90vh;
-    max-height: 100%;
+    min-height: 89vh;
+    max-height: 89vh;
     border: 2px solid #006CA8;
     margin: 10px auto auto auto;
     background-color: rgb(235, 235, 235);
@@ -10,7 +10,7 @@
 }
 
 .container3d{
-    min-height: 80vh;
+    min-height: 70vh;
 }
 
 .info-container{
@@ -21,7 +21,7 @@
 
 .view3D{
     width: 100%;
-    height: 83vh;
+    height: 90vh;
     position: relative;
 }
 
@@ -32,28 +32,26 @@
 
 
 .id-info{
-    font-size: 40px;
+    font-size: 2em;
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .title-text{
-    font-size: 22px;
+    font-size: 1.0em;
     font-family: 'Times New Roman', Times, serif;
     margin-top: 5px;
 }
 
 .info-text{
-    font-size: 24px;
+    font-size: 1.2em;
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif;
 }
 
-.custom-row{
-    margin-top: 20px;
-}
-
-p{
-    margin: 0px !important;
+.accordion-container{
+    overflow: auto;
+    position: relative;
+    height: 85vh;
 }
