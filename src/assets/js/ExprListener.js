@@ -68,7 +68,6 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 	// Exit a parse tree produced by ExprParser#aminoclause.
 	exitAminoclause(ctx) {
 		// First check the type of amino acid: can be unique or group or except.
-		console.log(ctx.getText());
 		if (this.lastAmino == "") {
 			this.lastAmino = ctx.getText()
 			this.index += 1;

@@ -254,8 +254,8 @@ export class CanvasComponent implements OnInit{
 
                 var link = { source: this.nodeSelected, target: node, text: this.actionClicked };
                 if (this.actionClicked == 'Gap') {
+                    // FALTA
                     let minmax = this.modalService.open(MinMaxGapComponent, { centered: true, size: 'sm' });
-                    console.log(minmax.componentInstance.data)
                 }
 
                 this.actionClicked = ''; // <- HERE GO THE MIN AND MAX OF THE GAP
@@ -332,6 +332,7 @@ export class CanvasComponent implements OnInit{
     }
 
     refreshText(){
+        // FALTA
         var links = this.graph.graphData().links;
         var nodes = this.graph.graphData().nodes;
         
@@ -374,6 +375,38 @@ export class CanvasComponent implements OnInit{
                 this.actionClicked = 'Gap';
                 break;
             case 'delete':
+                this.graph.graphData().nodes.find((node: any) => {
+                    if (node.id == this.nodeRightClicked.id) {
+                        this.graph.graphData().nodes.splice(this.graph.graphData().nodes.indexOf(node), 1);
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                })
+                // falta buscar los links y borrarlos
+                let newSource;
+                let newTarget;
+                this.graph.graphData().links.forEach((link: any): boolean => {
+                    if (link.source.id == this.nodeRightClicked.id) {
+                        newTarget = link.target;
+                        this.graph.graphData().links.splice(this.graph.graphData().links.indexOf(link), 1);
+                        return true;
+                    }
+                    return false;
+                });
+                this.graph.graphData().links.forEach((link: any): boolean => {
+                    if (link.target.id == this.nodeRightClicked.id) {
+                        newSource = link.source;
+                        this.graph.graphData().links.splice(this.graph.graphData().links.indexOf(link), 1);
+                        return true;
+                    }
+                    return false;
+                });
+                if(newSource && newTarget){
+                    let link = { source: newSource, target: newTarget, text: "Next", curvature: 0.0};
+                    this.graph.graphData().links.push(link);
+                }
 
                 this.nodeContextMenu = false;                
                 break;
@@ -409,6 +442,7 @@ export class CanvasComponent implements OnInit{
     }
 
     onLinkChange(){
+        // FALTA
         var text = '';
         var links = this.graph.graphData().links;
         var nodes = this.graph.graphData().nodes;
@@ -515,8 +549,6 @@ export class CanvasComponent implements OnInit{
         let pattern = this.inputPatternForm.value.pattern.toUpperCase();
         this.comQuery = Parser(pattern+'.');
         
-        // console.log(this.comQuery);
-
         if(this.comQuery.message !== 'success') {
             this.ngxNotifierService.createToast(this.comQuery.message, 'danger', 3000);
         }
@@ -590,9 +622,7 @@ export class CanvasComponent implements OnInit{
             return
         }
         aminos.forEach((amino, i) => {
-            console.log(i)
             if (amino.includes('(') && amino.includes(')') && amino.includes(',') && amino[0].toLowerCase() != 'x') {
-                console.log('entra aca 2')
                 this.correctInput = false;
                 return
             }
@@ -779,5 +809,14 @@ export class CanvasComponent implements OnInit{
         this.graph.width(divElement.offsetWidth-4);
         this.graph.height(divElement.offsetHeight-4);
         this.graph.zoomToFit();
+    }
+
+    testFunctions(){
+        
+        console.log('NODES')
+        console.log(this.graph.graphData().nodes)
+        console.log('++++++++++++++++++++++++++++++++++')
+        console.log('LINKS')
+        console.log(this.graph.graphData().links)
     }
 }

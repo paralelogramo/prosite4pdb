@@ -27,6 +27,8 @@ import { LinkRightClickMenuComponent } from './components/modals/link-right-clic
 import { SetAminoGapComponent } from './components/modals/set-amino-gap/set-amino-gap.component';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap/min-max-gap.component';
+import { LoginComponent } from './pages/login/login.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap/
     LinkRightClickMenuComponent,
     SetAminoGapComponent,
     CustomDatePipe,
-    MinMaxGapComponent
+    MinMaxGapComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -61,6 +64,7 @@ import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap/
     NgxNotifierModule,
   ],
   providers: [
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

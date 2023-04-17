@@ -39,16 +39,20 @@
         </div>
         <div class="text-input">
             <div class="py-2 row">
-                <div class="input-container col-md-11">
+                <div class="input-container col-md-10">
                     <form [formGroup]="inputPatternForm">
                         <div class="inputWithSufix">
                             <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
                         </div>
                     </form>
                 </div>
-                <div class="search-container col-md-1">
-                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)" [disabled]="!correctInput">
+                <div class="search-container col-md-2">
+                    <!-- <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)"
+                        [disabled]="!correctInput">
                         <img class="search-icon" src="../../../assets/search-icon.png">
+                    </button> -->
+                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="testFunctions()">
+                        test
                     </button>
                 </div>
                 

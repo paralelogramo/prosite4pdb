@@ -31,6 +31,7 @@
     "bootstrap": "^5.2.3",
     "force-graph": "^1.43.0",
     "jquery": "^3.6.4",
+    "ngx-cookie-service": "^15.0.0",
     "ngx-device-detector": "^5.0.1",
     "ngx-notifier": "^9.0.0",
     "ngx-toastr": "^16.0.1",
