@@ -18,6 +18,14 @@ import { find, pairwise, startWith } from 'rxjs';
 import { ViewportScroller } from '@angular/common';
 import { Router } from '@angular/router';
 import { MinMaxGapComponent } from '../modals/min-max-gap/min-max-gap/min-max-gap.component';
+import { Color, Gradient } from '3dmol';
+
+interface gapConstruct{
+    source: number;
+    target: number;
+    minGap: number;
+    maxGap: number;
+}
 
 interface Data {
     nodes: any[];
@@ -35,8 +43,7 @@ export class CanvasComponent implements OnInit{
         {
             'message': 'Linking Amino Acid Chains',
             'icon': 'aminoacids'
-        },
-        {
+        },{
             'message': 'Dividing the Cells',
             'icon': 'cell-division'
         },{
@@ -49,7 +56,7 @@ export class CanvasComponent implements OnInit{
             'message': 'Searching for Amino Acid Patterns',
             'icon': 'molecules'
         },{
-            'message': 'Observing Pockets',
+            'message': 'Looking for Pockets',
             'icon': 'protein'
         },{
             'message': 'Making the Scientist Work',
@@ -64,10 +71,10 @@ export class CanvasComponent implements OnInit{
             'message': 'Targeting Amino Acid',
             'icon': 'target'
         },{
-            'message': 'Moving Test Tubes',
+            'message': 'Shaking Test Tubes',
             'icon': 'test-tube'
         },{
-            'message': 'Seeing a Water Molecule',
+            'message': 'Looking for a Water Molecule',
             'icon': 'water'
         }
     ]
@@ -75,7 +82,6 @@ export class CanvasComponent implements OnInit{
     loadMessage: string = '';
     loadIcon: string = '';
 
-    curvature: number = 0.2;
     searchTerm: string;
     page = 1;
     pageSize = 10;
@@ -87,6 +93,7 @@ export class CanvasComponent implements OnInit{
     closeModalAminoSelect: NgbModalRef;
     closeModalSelectResult: NgbModalRef;
     toasts: any[] = [];
+    gaps: gapConstruct[] = [];
 
     canvasContextMenu = false;
     canvasContextMenuX = 0;
@@ -127,7 +134,7 @@ export class CanvasComponent implements OnInit{
     ];
 
     inputPatternForm = new FormGroup({
-        pattern: new FormControl(''),
+        pattern: new FormControl('a-x(2,4)-r-c-x(3,5)-a'),
     });
 
     filter = new FormControl('', { nonNullable: true });
@@ -153,7 +160,8 @@ export class CanvasComponent implements OnInit{
         this.graph
         (document.getElementById('canvasGraph'))
         .graphData(data)
-        .linkDirectionalArrowLength(2)
+        .linkWidth(3)
+        .linkDirectionalArrowLength(1)
         .linkDirectionalArrowColor((link:any) => link.color = '#006CA8')
         .linkCurvature('curvature')
         .nodeLabel('aminos')
@@ -186,12 +194,9 @@ export class CanvasComponent implements OnInit{
         })
         .linkCanvasObjectMode(() => 'after')
         .linkCanvasObject((link: any, ctx: any) => {
-            const fontSize = 3;
-            ctx.font = `bold ${fontSize}px Sans-Serif`;
-            // let dy = link.target.y - link.source.y;
-            // let h = Math.sqrt((link.target.x - link.source.x)**2+(link.target.y - link.source.y)**2);
-            // let angle = Math.asin(dy/h);
-            // ctx.rotate(angle);
+            const fontSize = 2;
+            ctx.font = `bold ${fontSize}px Consolas`;
+            
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = '#006CA8';
@@ -209,20 +214,68 @@ export class CanvasComponent implements OnInit{
             this.linkSelected = link;
         })
         .nodeCanvasObject((node: any, ctx) => {
-            const size = 8;
-            const img = new Image();
 
             if (node.isGroup) {
-                img.src = this.imgGroupUrl;
-                ctx.drawImage(img, node.x - size / 2, node.y - size / 2, size, size);
+                ctx.beginPath();
+                ctx.fillStyle = '#5C0096';
+                ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb(235, 235, 235)';
+                ctx.arc(node.x, node.y, 3.6, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.font = 'bold 2px Consolas';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#5C0096';
+                ctx.fillText('Group', node.x, node.y);
             }
             else if (node.isExcept) {
-                img.src = this.imgExceptUrl;
-                ctx.drawImage(img, node.x - size / 2, node.y - size / 2, size, size);
+                ctx.beginPath();
+                ctx.fillStyle = '#008717';
+                ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.fillStyle = 'rgb(235, 235, 235)';
+                ctx.arc(node.x, node.y, 3.6, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.font = 'bold 1.5px Consolas';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#008717';
+                ctx.fillText('Except', node.x, node.y);
             }
             else {
-                img.src = this.getAminoIcon(node.aminos[0]);
-                ctx.drawImage(img, node.x - size / 2, node.y - size / 2, size, size);
+                if(node.aminos[0] == 'ANY') {
+                    ctx.beginPath();
+                    ctx.fillStyle = '#D06225';
+                    ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgb(235, 235, 235)';
+                    ctx.arc(node.x, node.y, 3.6, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                    ctx.font = 'bold 2px Consolas';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#D06225';
+                    ctx.fillText(node.aminos[0], node.x, node.y);
+                }
+                else{
+                    ctx.beginPath();
+                    ctx.fillStyle = '#006CA8';
+                    ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgb(235, 235, 235)';
+                    ctx.arc(node.x, node.y, 3.6, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                    ctx.font = 'bold 2px Consolas';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#006CA8';
+                    ctx.fillText(node.aminos[0], node.x, node.y);
+                }
             }
 
             if (node == this.nodeSelected) {
@@ -254,18 +307,39 @@ export class CanvasComponent implements OnInit{
 
                 var link = { source: this.nodeSelected, target: node, text: this.actionClicked };
                 if (this.actionClicked == 'Gap') {
-                    // FALTA
-                    let minmax = this.modalService.open(MinMaxGapComponent, { centered: true, size: 'sm' });
+                    let minmax = this.modalService.open(MinMaxGapComponent, { centered: true, size: 'md' });
+                    minmax.result.then((result) => {
+                        if(result == 'cancel'){
+                            return
+                        }
+                        if(result != 'cancel'){
+                            link.text = 'X(' + result[0] + ',' + result[1] + ')';
+                            this.actionClicked = '';
+                            this.nodeSelected = null;
+                            this.graph.graphData().links.push(link);
+
+                            if(this.graph.graphData().nodes.length == this.graph.graphData().links.length + 1){
+                                this.refreshText();
+                            }
+                            return
+                        }
+                    })
+                    .catch((error) => {
+                    });
                 }
+                if(this.actionClicked == 'Next'){
+                    link.text = 'Next';
+                    this.actionClicked = '';
+                    this.nodeSelected = null;
+                    this.graph.graphData().links.push(link);
 
-                this.actionClicked = ''; // <- HERE GO THE MIN AND MAX OF THE GAP
+                    if (this.graph.graphData().nodes.length == this.graph.graphData().links.length + 1) {
+                        this.refreshText();
+                    }
+                    return
+                }
+                this.actionClicked = '';
                 this.nodeSelected = null;
-                this.graph.graphData().links.push(link);
-
-                // MAKE THE COUNT OF LINKS AND NODES
-                // IF NODES = LINKS - 1 CHECK THE ORDER
-                // GET THE FIRST NODE AND CONSTRUCT THE TEXT
-                this.refreshText();
                 return
             }
 
@@ -300,14 +374,16 @@ export class CanvasComponent implements OnInit{
                         if(result!= 0 && result != 1){
                             node.aminos = result;
                         }
-                    });
+                    })
+                    .catch((error) => {});
                 }
                 else {
                     this.closeModalAminoSelect.result.then((result) => {
                         if(result!= 0 && result != 1){
                             node.aminos = result;
                         }
-                    });
+                    })
+                    .catch((error) => { });
                 }
             }    
         })
@@ -321,6 +397,28 @@ export class CanvasComponent implements OnInit{
 
             this.nodeRightClicked = node;
         })
+        .onLinkClick((link: any, event) => {
+            this.nodeContextMenu = false;
+            this.canvasContextMenu = false;
+            this.linkContextMenu = false;
+            if(link.text != 'Next'){
+                let minmax = this.modalService.open(MinMaxGapComponent, { centered: true, size: 'md' });
+                minmax.componentInstance.data = link.text;
+                minmax.result.then((result) => {
+                    if(result == 'cancel'){
+                        return
+                    }
+                    if(result != 'cancel'){
+                        link.text = 'X(' + result[0] + ',' + result[1] + ')';
+                        return
+                    }
+                })
+                .catch((error) => {
+                });
+            }
+        })
+
+
         this.onResize(null);
         setInterval(() => {
             const { nodes, links } = this.graph.graphData();
@@ -384,7 +482,6 @@ export class CanvasComponent implements OnInit{
                         return false;
                     }
                 })
-                // falta buscar los links y borrarlos
                 let newSource;
                 let newTarget;
                 this.graph.graphData().links.forEach((link: any): boolean => {
@@ -614,6 +711,7 @@ export class CanvasComponent implements OnInit{
         var distanceX = 0;
         var distanceY = 0;
         var nodeList = [];
+        this.gaps = [];
         var aminos = pattern.split('-');
 
         // THIS PART WILL DISSAPEAR AFTER THE UPDATE OF THE GRAMMAR
@@ -628,11 +726,28 @@ export class CanvasComponent implements OnInit{
             }
         });
         // END OF THE PART THAT WILL DISSAPEAR
-
-        aminos.forEach(amino => {
+        var indexGap = 0;
+        aminos.forEach((amino) => {
+            indexGap += 1;
             amino = amino.toUpperCase();
             var repetition = 1;
-            if(amino.includes('(') && amino.includes(')')){
+            if (amino.includes('(') && amino.includes(')') && amino.includes(',')) {
+                // console.log("Gap: " + amino)
+                var repetitionExtended = amino.split('(')[1];
+                var parts = repetitionExtended.split(',');
+                var min = Number(parts[0]);
+                var max = Number(parts[1].replaceAll(')', ''));
+                var gap = {
+                    source: indexGap -1,
+                    target: indexGap,
+                    minGap: min,
+                    maxGap: max
+                }
+                indexGap -= 1;
+                this.gaps.push(gap);
+                return
+            }
+            if(amino.includes('(') && amino.includes(')') && !amino.includes(',')){
                 var parts = amino.split('(');
                 repetition = Number(parts[1].replaceAll(')',''));
                 amino = parts[0];
@@ -699,7 +814,14 @@ export class CanvasComponent implements OnInit{
         var links = []
         var i = 1;
         while (i < nodeList.length) {
-            var link = { source: i, target: i+1, text: "Next", curvature : 0.0};
+            var link;
+            const res = this.gaps.find(g => g.source == i);
+            if(res){
+                link = { source: i, target: i + 1, text: "X(" + String(res.minGap) + "," + String(res.maxGap) + ")", curvature: 0.0 };
+            }
+            else{
+                link = { source: i, target: i + 1, text: "Next", curvature: 0.0 };
+            }
             links.push(link);
             i += 1;
         }
@@ -809,14 +931,5 @@ export class CanvasComponent implements OnInit{
         this.graph.width(divElement.offsetWidth-4);
         this.graph.height(divElement.offsetHeight-4);
         this.graph.zoomToFit();
-    }
-
-    testFunctions(){
-        
-        console.log('NODES')
-        console.log(this.graph.graphData().nodes)
-        console.log('++++++++++++++++++++++++++++++++++')
-        console.log('LINKS')
-        console.log(this.graph.graphData().links)
     }
 }
