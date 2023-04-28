@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="modal-header">
+        <h4 class="title">Set min and max gap</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" form [formGroup]="minmaxForm">
+            <div class="col-md-6">
+                <label>Mínimo:</label>
+                <input type="number" class="form-control" id="min" name="min" min="0" max="99" formControlName="min">
+            </div>
+            <div class="col-md-6">
+                <label>Máximo</label>
+                <input type="number" class="form-control" id="max" name="max" min="1" max="100" formControlName="max">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outlined-primary" (click)="onClose('close')">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onClose('success')">Set Gap</button>
+    </div>
+</div>
+
+<ngx-notifier [duration]="3000"></ngx-notifier>

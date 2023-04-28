@@ -1,4 +1,4 @@
-// Generated from java-escape by ANTLR 4.11.1
+// Generated from Expr.g4 by ANTLR 4.12.0
 // jshint ignore: start
 import antlr4 from 'antlr4';
 
@@ -8,6 +8,24 @@ export default class ExprVisitor extends antlr4.tree.ParseTreeVisitor {
 
 	// Visit a parse tree produced by ExprParser#pattern.
 	visitPattern(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
+	// Visit a parse tree produced by ExprParser#ligandclause.
+	visitLigandclause(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
+	// Visit a parse tree produced by ExprParser#ligandextended.
+	visitLigandextended(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
+	// Visit a parse tree produced by ExprParser#ligand.
+	visitLigand(ctx) {
 	  return this.visitChildren(ctx);
 	}
 
@@ -74,6 +92,12 @@ export default class ExprVisitor extends antlr4.tree.ParseTreeVisitor {
 
 	// Visit a parse tree produced by ExprParser#patternend.
 	visitPatternend(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
+	// Visit a parse tree produced by ExprParser#character.
+	visitCharacter(ctx) {
 	  return this.visitChildren(ctx);
 	}
 

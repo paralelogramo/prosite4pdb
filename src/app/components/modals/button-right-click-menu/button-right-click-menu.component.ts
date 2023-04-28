@@ -9,6 +9,7 @@ export class ButtonRightClickMenuComponent implements OnInit{
   @Input() x;
   @Input() y;
   @Input() id; 
+  @Input() isLigand;
   @Output() optionSelected = new EventEmitter<{}>();
 
   constructor() {

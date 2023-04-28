@@ -11,7 +11,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { ToolComponent } from './pages/tool/tool.component';
-import { ResultsComponent } from './components/results/results.component';
+import { ResultsModalsComponent } from './components/modals/results/results.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgxNotifierModule } from 'ngx-notifier';
@@ -26,9 +26,17 @@ import { ProteinComponent } from './pages/protein/protein.component';
 import { LinkRightClickMenuComponent } from './components/modals/link-right-click-menu/link-right-click-menu.component';
 import { SetAminoGapComponent } from './components/modals/set-amino-gap/set-amino-gap.component';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
-import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap/min-max-gap.component';
+import { MinMaxGapComponent } from './components/modals/min-max-gap/min-max-gap.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CookieService } from 'ngx-cookie-service';
+import { SelectLigandComponent } from './components/modals/select-ligand/select-ligand.component';
+import { ConfigQueryComponent } from './components/modals/config-query/config-query.component';
+import { customTextLigandPipe } from './pipes/custom-text-ligand.pipe';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [
@@ -38,7 +46,7 @@ import { CookieService } from 'ngx-cookie-service';
     NotfoundComponent,
     FooterComponent,
     ToolComponent,
-    ResultsComponent,
+    ResultsModalsComponent,
     ModalSelectAminoComponent,
     CanvasRightClickMenuComponent,
     ButtonRightClickMenuComponent,
@@ -50,8 +58,11 @@ import { CookieService } from 'ngx-cookie-service';
     LinkRightClickMenuComponent,
     SetAminoGapComponent,
     CustomDatePipe,
+    customTextLigandPipe,
     MinMaxGapComponent,
-    LoginComponent
+    LoginComponent,
+    SelectLigandComponent,
+    ConfigQueryComponent
   ],
   imports: [
     BrowserModule,
@@ -62,8 +73,12 @@ import { CookieService } from 'ngx-cookie-service';
     FormsModule,
     BrowserAnimationsModule,
     NgxNotifierModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase},
     CookieService
   ],
   bootstrap: [AppComponent]

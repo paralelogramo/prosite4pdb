@@ -23,4 +23,12 @@ export class AminoService {
 	getProteinByID(id: string): any {
 		return this.http.get<any>(`${this.host}/getProteinByID?id=${id}`);
 	}
+
+	getListLigands(){
+		return this.http.get<any>(`${this.host}/getListLigands`);
+	}
+
+	getListOfAminosByStartEnd(p_id: string, start: number, end: number){
+		return this.http.get<any>(`${this.host}/getListOfAminosByStartEnd?p_id=${p_id}&start=${start}&end=${end}`);
+	}
 }

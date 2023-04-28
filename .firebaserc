@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "thesispdb": {
+      "hosting": {
+        "prosite4pdb": [
+          "thesispdb"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "thesispdb"
+  }
+}

@@ -5,4 +5,9 @@
     background-color: #2d2d30;
     border-color: #272729;
     color: #c9c9c9;
-  }
+    z-index: 9999 !important;
+}
+
+.ngx-notifier{
+    z-index: 9999 !important;
+}

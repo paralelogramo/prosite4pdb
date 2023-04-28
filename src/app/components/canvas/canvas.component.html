@@ -1,21 +1,20 @@
-<div class="container-fluid container-custom">
+<div id="base" class="container-fluid container-custom">
     <div class="canvas-container">
-        <div class="left-button-group actions-group float-md-left flex-wrap">
-            <!-- <div class="extra-buttons">
-                <button type="button" class="btn btn-primary btn-primary-custom">
-                    <img src="../../../assets/Save.png" style="width:1vw;height:2.2vh;">
-                </button>
-                <button type="button" class="btn btn-warning btn-warning-custom">
-                    <img src="../../../assets/Load.png" style="width:1vw;height:2.2vh;">
-                </button>
-            </div> -->
-        </div>
+
         <div id="canvasID" class="canvas" (window:resize)="onResize($event)">
             <div class='canvasGraph' id="canvasGraph">
             </div>
+            <div class="ligand-container">
+                <button
+                    type="button"
+                    class="btn btn-ligand-activated"
+                    (click)="selectLigands()">
+                    {{ligandList | customTextLigand}}
+                </button>
+            </div>
             <div class="contextMenu" *ngIf="canvasContextMenu">
                 <app-canvas-right-click-menu
-                    [x]="canvasContextMenuX"
+                    [x]="canvasContextMenuX"    
                     [y]="canvasContextMenuY"
                     (optionSelected)="onCanvasContextMenuOptionSelected($event)"
                 ></app-canvas-right-click-menu>
@@ -25,6 +24,7 @@
                     [x]="nodeContextMenuX"
                     [y]="nodeContextMenuY"
                     [id]="nodeRightClicked.id"
+                    [isLigand]="nodeRightClicked.isLigand"
                     (optionSelected)="onNodeContextMenuOptionSelected($event)"
                 ></app-button-right-click-menu>
             </div>
@@ -39,17 +39,22 @@
         </div>
         <div class="text-input">
             <div class="py-2 row">
-                <div class="input-container col-md-10">
+                <div class="input-container col-md-10 col-sm-12">
                     <form [formGroup]="inputPatternForm">
                         <div class="inputWithSufix">
-                            <input type="text" class="form-control input-custom" placeholder="V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
+                            <input type="text" class="form-control input-custom" placeholder="[ZN,S04]:V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
                         </div>
                     </form>
                 </div>
-                <div class="search-container col-md-2">
+                <div class="search-container col-md-1 col-sm-6">
                     <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)"
                         [disabled]="!correctInput">
                         <img class="search-icon" src="../../../assets/search-icon.png">
+                    </button>
+                </div>
+                <div class="configQuery-container col-md-1 col-sm-6">
+                    <button type="button" class="btn btn-outline-primary btn-custom" (click)="openConfigQueryModal()">
+                        <img class="search-icon" src="../../../assets/config.png">
                     </button>
                 </div>
                 
@@ -58,43 +63,61 @@
         </div>
     </div>
 
-    <hr class="hr hr-custom" />
+    <hr *ngIf="results.length != 0" class="hr hr-custom" />
 
     <div class="results-container h-75 custom-res">
-        <div class="row">
+        <!-- <div class="row">
             <div class="container filters-container">
                 <div class="col-md-4">
-                    <!-- <form>
+                    <form>
                         <div class="form-group form-inline">
                             Search country by name: 
                             <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="searchTerm"
                             (input)="search($event.target.value)" />
                         </div>
-                    </form> -->
-                    <!-- <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" /> -->
+                    </form>
+                    <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" />
                 </div>
             </div>
-        </div>
-        <div class="row" id="resultsTable">
+        </div> -->
+        <div *ngIf="results.length != 0" class="row" id="resultsTable">
             <div class="col-md-12 container-custom-table">
                 <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Classification</th>
-                        <th scope="col">Organism</th>
-                        <th scope="col">Action</th>
+                        <th class="table-header" style="width: 5%;" scope="col">ID</th>
+                        <th class="table-header" style="width: 25%;" scope="col">TITLE</th>
+                        <th class="table-header" style="width: 18%;" scope="col">CLASSIFICATION</th>
+                        <th class="table-header" style="width: 18%;" scope="col">ORGANISM</th>
+                        <th class="table-header" style="width: 34%;" scope="col">PATTERN</th>
+                        <th class="table-header" style="width: 10%;" scope="col">ACTION</th>
                       </tr>
                     </thead>
                     <tbody class="table-group-divider">
                       <tr *ngFor="let protein of results">
-                        <th scope="row">{{ protein.id }}</th>
-                        <td>{{protein.title}}</td>
-                        <td>{{protein.classification}}</td>
-                        <td>{{protein.organism}}</td>
+                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.id}}>{{ protein.id }}</p> </td>
+                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.title}}>{{ protein.title }}</p> </td>
+                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.classification}}>{{ protein.classification }}</p> </td>
+                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.organism}}>{{ protein.organism }}</p> </td>
+                        <td class="td-row-table"> 
+                            <p *ngIf="protein.pattern != ''; else elseBlock" class="result-text" placement="top" ngbTooltip={{protein.pattern}}>
+                                {{ protein.pattern }}
+                            </p>
+                            <ng-template #elseBlock>
+                                    <div id="js-preloader" class="js-preloader">
+                                        <div class="preloader-inner">
+                                            <span class="dot"></span>
+                                            <div class="dots">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </ng-template>
+                        </td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-custom" (click)="openProteinPDB(protein)">
+                            <button type="button" class="btn btn-outline-primary btn-custom" (click)="openProteinPDB(protein)" disabled placement="top" ngbTooltip='En Construccion'>
                                 <img class="search-icon" src="../../../assets/goToPDB.png">
                             </button>
                         </td>
@@ -130,10 +153,11 @@
 
 <ng-template #content class="modal-center" let-c="close" let-d="dismiss">
     <div class="modal-body">
-        <h4 class="modal-title col-12 text-center" id="modal-basic-title">Searching...</h4>
+        <h3 class="modal-title col-12 text-center" id="modal-basic-title">{{searchingTitleText}}</h3>
         <div class="div text-center" style="margin-top: 15px;">
             <img src="../../../assets/loadIcons/{{loadIcon}}.gif" alt="{{loadIcon}}" class="molecules_gif">
-            <p>{{loadMessage}}</p>
+            <h5 class="modal-title text-center load-msg">{{loadMessage}}</h5>
+            <h6 class="timer-text text-center">Query Time: {{timer|date:'mm:ss:SSS'}}</h6>
         </div>
     </div>
 </ng-template>

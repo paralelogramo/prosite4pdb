@@ -1,30 +1,9 @@
-// Generated from java-escape by ANTLR 4.11.1
+// Generated from Expr.g4 by ANTLR 4.12.0
 // jshint ignore: start
 import antlr4 from 'antlr4';
-import getQuery from './enumQueries';
-import { amino_any_next_amino,
-		 amino_any_next_amino_any,
-		 amino_next_amino,
-		 amino_next_amino_any,
-		 amino_gap_amino
-		} from './enumQueries';
-import { setBigQuery } from './catchElements';
-
-class repExt {
-	constructor(last, next, min, max) {
-		this.last = last;
-		this.next = next;
-		this.min = min;
-		this.max = max;
-	}
-}
 
 // This class defines a complete listener for a parse tree produced by ExprParser.
 export default class ExprListener extends antlr4.tree.ParseTreeListener {
-	lastAmino = "";
-	index = 0;
-	queries = [];
-	repetitions = [];
 
 	// Enter a parse tree produced by ExprParser#pattern.
 	enterPattern(ctx) {
@@ -32,23 +11,33 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#pattern.
 	exitPattern(ctx) {
-		var bigQuery = getQuery(this.queries);
-		var completeQuery = `
-		SELECT id, title, classification, organism, Q.* FROM (
-			`+ bigQuery + `) AS Q NATURAL JOIN protein WHERE protein_id=id`;
-
-		// Check repetitions
-		this.repetitions.forEach(rep => {
-			var query = amino_gap_amino;
-			query = query.replaceAll('<<amino1_id>>', rep.last.toString());
-			query = query.replaceAll('<<amino2_id>>', rep.next.toString());
-			query = query.replaceAll('<<gap_min>>', rep.min.toString());
-			query = query.replaceAll('<<gap_max>>', rep.max.toString());
-			completeQuery = query.replaceAll('<<big_query>>', completeQuery);
-		});
+	}
 
 
-		setBigQuery(completeQuery);
+	// Enter a parse tree produced by ExprParser#ligandclause.
+	enterLigandclause(ctx) {
+	}
+
+	// Exit a parse tree produced by ExprParser#ligandclause.
+	exitLigandclause(ctx) {
+	}
+
+
+	// Enter a parse tree produced by ExprParser#ligandextended.
+	enterLigandextended(ctx) {
+	}
+
+	// Exit a parse tree produced by ExprParser#ligandextended.
+	exitLigandextended(ctx) {
+	}
+
+
+	// Enter a parse tree produced by ExprParser#ligand.
+	enterLigand(ctx) {
+	}
+
+	// Exit a parse tree produced by ExprParser#ligand.
+	exitLigand(ctx) {
 	}
 
 
@@ -67,347 +56,6 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#aminoclause.
 	exitAminoclause(ctx) {
-		// First check the type of amino acid: can be unique or group or except.
-		if (this.lastAmino == "") {
-			this.lastAmino = ctx.getText()
-			this.index += 1;
-		}
-		else {
-			// Check if the last amino is a Any amino
-			if(this.lastAmino.toUpperCase() == 'X'){
-
-				// Check if the current amino is a Any amino
-				if(ctx.getText().toUpperCase() == 'X'){
-					var query = amino_any_next_amino_any;
-					query = query.replaceAll('<<amino_any 1 id>>', (this.index).toString())
-					query = query.replaceAll("<<amino_any 2 id>>", (this.index + 1).toString())
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a except
-				else if(ctx.getText().includes('{') && ctx.getText().includes('}')){
-					var query = amino_any_next_amino;
-					query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-					query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids = ctx.getText().replace('{', '').replace('}', '').split('');
-					var first = aminoAcids.shift();
-					var condition = "(amino2_symbol !='"+first+"' ";
-					aminoAcids.forEach(amino => {
-						condition += "AND amino2_symbol !='"+amino+"' ";
-					});
-					condition += ")";
-					query = query.replaceAll('<<condition>>', condition);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a group
-				else if(ctx.getText().includes('[') && ctx.getText().includes(']')){
-					var query = amino_any_next_amino;
-					query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-					query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-
-					// remove the square brackets and iterate over the amino acids
-					var aminoAcids = ctx.getText().replace('[', '').replace(']', '').split('');
-					var first = aminoAcids.shift();
-					var condition = "(amino2_symbol ='"+first+"' ";
-					aminoAcids.forEach(amino => {
-						condition += "OR amino2_symbol ='"+amino+"' ";
-					});
-					condition += ")";
-					query = query.replaceAll('<<condition>>', condition);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a unique amino
-				else{
-					var query = amino_any_next_amino;
-					query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-					query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-					query = query.replaceAll('<<condition>>', "amino2_symbol ='"+ctx.getText()+"'");
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-			}
-
-			// Check if the last amino is a except
-			else if (this.lastAmino.includes('{') && this.lastAmino.includes('}')){
-				// Check if the current amino is a Any amino
-				if(ctx.getText().toUpperCase() == 'X'){
-					var query = amino_next_amino_any;
-					query = query.replaceAll('<<amino id>>', (this.index).toString());
-					query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString());
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids = this.lastAmino.replace('{', '').replace('}', '').split('');
-					var first = aminoAcids.shift();
-					var condition = "(amino1_symbol !='"+first+"' ";
-					aminoAcids.forEach(amino => {
-						condition += "AND amino1_symbol !='"+amino+"' ";
-					});
-					condition += ")";
-					query = query.replaceAll('<<condition>>', condition);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a except
-				else if(ctx.getText().includes('{') && ctx.getText().includes('}')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol !='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "AND amino1_symbol !='"+amino+"' ";
-					});
-					condition1 += ")";
-					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "AND amino2_symbol !='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', condition2);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a group
-				else if(ctx.getText().includes('[') && ctx.getText().includes(']')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol !='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "AND amino1_symbol !='"+amino+"' ";
-					});
-					condition1 += ")";
-					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "OR amino2_symbol ='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', condition2);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a unique amino
-				else{
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol !='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "AND amino1_symbol !='"+amino+"' ";
-					});
-					condition1 += ")";
-					
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+ctx.getText()+"'")
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-			}
-
-			// Check if the last amino is a group
-			else if (this.lastAmino.includes('[') && this.lastAmino.includes(']')){
-				// Check if the current amino is a Any amino
-				if(ctx.getText().toUpperCase() == 'X'){
-					var query = amino_next_amino_any;
-					query = query.replaceAll('<<amino id>>', (this.index).toString());
-					query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString());
-
-					// remove the square brackets and iterate over the amino acids
-					var aminoAcids = this.lastAmino.replace('[', '').replace(']', '').split('');
-					var first = aminoAcids.shift();
-					var condition = "(amino1_symbol ='"+first+"' ";
-					aminoAcids.forEach(amino => {
-						condition += "OR amino1_symbol ='"+amino+"' ";
-					});
-					condition += ")";
-					query = query.replaceAll('<<condition>>', condition);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a except
-				else if(ctx.getText().includes('{') && ctx.getText().includes('}')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the curly and square brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol ='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "OR amino1_symbol ='"+amino+"' ";
-					});
-					condition1 += ")";
-					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "AND amino2_symbol !='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', condition2);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a group
-				else if(ctx.getText().includes('[') && ctx.getText().includes(']')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the square brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol ='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "OR amino1_symbol ='"+amino+"' ";
-					});
-					condition1 += ")";
-					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "OR amino2_symbol ='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', condition2);
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a unique amino
-				else{
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-
-					// remove the square brackets and iterate over the amino acids
-					var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-					var first1 = aminoAcids1.shift();
-					var condition1 = "(amino1_symbol ='"+first1+"' ";
-					aminoAcids1.forEach(amino => {
-						condition1 += "OR amino1_symbol ='"+amino+"' ";
-					});
-					condition1 += ")";
-					
-					query = query.replaceAll('<<condition 1>>', condition1);
-					query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+ctx.getText()+"'")
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-			}
-
-			// Check if the last amino is a unique amino
-			else{
-				// Check if the current amino is a Any amino
-				if(ctx.getText().toUpperCase() == 'X'){
-					var query = amino_next_amino_any;
-					query = query.replaceAll('<<amino id>>', (this.index).toString())
-					query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString())
-					query = query.replaceAll('<<condition>>', "amino1_symbol ='"+this.lastAmino+"'")
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a except
-				else if(ctx.getText().includes('{') && ctx.getText().includes('}')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids2 = ctx.getText().replace('{', '').replace('}', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol !='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "AND amino2_symbol !='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-					query = query.replaceAll('<<condition 2>>', condition2)
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a group
-				else if(ctx.getText().includes('[') && ctx.getText().includes(']')){
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-					query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
-
-					// remove the curly brackets and iterate over the amino acids
-					var aminoAcids2 = ctx.getText().replace('[', '').replace(']', '').split('');
-					var first2 = aminoAcids2.shift();
-					var condition2 = "(amino2_symbol ='"+first2+"' ";
-					aminoAcids2.forEach(amino => {
-						condition2 += "OR amino2_symbol ='"+amino+"' ";
-					});
-					condition2 += ")";
-					query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-					query = query.replaceAll('<<condition 2>>', condition2)
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-
-				// Check if the current amino is a unique amino
-				else{
-					var query = amino_next_amino;
-					query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-					query = query.replaceAll('<<amino 2 id>>', (this.index+1).toString())
-					query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-					query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+ctx.getText()+"'")
-					this.queries.push(query)
-					this.lastAmino = ctx.getText()
-					this.index += 1;
-				}
-			}
-		}
 	}
 
 
@@ -435,350 +83,6 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#aminorepetition.
 	exitAminorepetition(ctx) {
-		var amino = ctx.getText().split('(')[0]
-		var repetition = ctx.getText().split('(')[1].replace(')', '')
-		for (let i = 0; i < repetition; i++) {
-			if (this.lastAmino == "") {
-				this.lastAmino = amino
-				this.index += 1;
-			}
-			else {
-				// Check if the last amino is a Any amino
-				if(this.lastAmino.toUpperCase() == 'X'){
-	
-					// Check if the current amino is a Any amino
-					if(amino.toUpperCase() == 'X'){
-						var query = amino_any_next_amino_any;
-						query = query.replaceAll('<<amino_any 1 id>>', (this.index).toString())
-						query = query.replaceAll("<<amino_any 2 id>>", (this.index + 1).toString())
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a except
-					else if(amino.includes('{') && amino.includes('}')){
-						var query = amino_any_next_amino;
-						query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-						query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids = amino.replace('{', '').replace('}', '').split('');
-						var first = aminoAcids.shift();
-						var condition = "(amino2_symbol !='"+first+"' ";
-						aminoAcids.forEach(amino => {
-							condition += "AND amino2_symbol !='"+amino+"' ";
-						});
-						condition += ")";
-						query = query.replaceAll('<<condition>>', condition);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a group
-					else if(amino.includes('[') && amino.includes(']')){
-						var query = amino_any_next_amino;
-						query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-						query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-	
-						// remove the square brackets and iterate over the amino acids
-						var aminoAcids = amino.replace('[', '').replace(']', '').split('');
-						var first = aminoAcids.shift();
-						var condition = "(amino2_symbol ='"+first+"' ";
-						aminoAcids.forEach(amino => {
-							condition += "OR amino2_symbol ='"+amino+"' ";
-						});
-						condition += ")";
-						query = query.replaceAll('<<condition>>', condition);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a unique amino
-					else{
-						var query = amino_any_next_amino;
-						query = query.replaceAll('<<amino_any id>>', (this.index).toString());
-						query = query.replaceAll('<<amino id>>', (this.index + 1).toString());
-						query = query.replaceAll('<<condition>>', "amino2_symbol ='"+amino+"'");
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-				}
-	
-				// Check if the last amino is a except
-				else if (this.lastAmino.includes('{') && this.lastAmino.includes('}')){
-					// Check if the current amino is a Any amino
-					if(amino.toUpperCase() == 'X'){
-						var query = amino_next_amino_any;
-						query = query.replaceAll('<<amino id>>', (this.index).toString());
-						query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString());
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids = this.lastAmino.replace('{', '').replace('}', '').split('');
-						var first = aminoAcids.shift();
-						var condition = "(amino1_symbol !='"+first+"' ";
-						aminoAcids.forEach(amino => {
-							condition += "AND amino1_symbol !='"+amino+"' ";
-						});
-						condition += ")";
-						query = query.replaceAll('<<condition>>', condition);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a except
-					else if(amino.includes('{') && amino.includes('}')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol !='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "AND amino1_symbol !='"+amino+"' ";
-						});
-						condition1 += ")";
-						var aminoAcids2 = amino.replace('{', '').replace('}', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol !='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "AND amino2_symbol !='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', condition2);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a group
-					else if(amino.includes('[') && amino.includes(']')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol !='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "AND amino1_symbol !='"+amino+"' ";
-						});
-						condition1 += ")";
-						var aminoAcids2 = amino.replace('[', '').replace(']', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol ='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "OR amino2_symbol ='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', condition2);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a unique amino
-					else{
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('{', '').replace('}', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol !='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "AND amino1_symbol !='"+amino+"' ";
-						});
-						condition1 += ")";
-						
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+amino+"'")
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-				}
-	
-				// Check if the last amino is a group
-				else if (this.lastAmino.includes('[') && this.lastAmino.includes(']')){
-					// Check if the current amino is a Any amino
-					if(amino.toUpperCase() == 'X'){
-						var query = amino_next_amino_any;
-						query = query.replaceAll('<<amino id>>', (this.index).toString());
-						query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString());
-	
-						// remove the square brackets and iterate over the amino acids
-						var aminoAcids = this.lastAmino.replace('[', '').replace(']', '').split('');
-						var first = aminoAcids.shift();
-						var condition = "(amino1_symbol ='"+first+"' ";
-						aminoAcids.forEach(amino => {
-							condition += "OR amino1_symbol ='"+amino+"' ";
-						});
-						condition += ")";
-						query = query.replaceAll('<<condition>>', condition);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a except
-					else if(amino.includes('{') && amino.includes('}')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the curly and square brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol ='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "OR amino1_symbol ='"+amino+"' ";
-						});
-						condition1 += ")";
-						var aminoAcids2 = amino.replace('{', '').replace('}', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol !='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "AND amino2_symbol !='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', condition2);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a group
-					else if(amino.includes('[') && amino.includes(']')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the square brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol ='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "OR amino1_symbol ='"+amino+"' ";
-						});
-						condition1 += ")";
-						var aminoAcids2 = amino.replace('[', '').replace(']', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol ='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "OR amino2_symbol ='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', condition2);
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a unique amino
-					else{
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString());
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString());
-	
-						// remove the square brackets and iterate over the amino acids
-						var aminoAcids1 = this.lastAmino.replace('[', '').replace(']', '').split('');
-						var first1 = aminoAcids1.shift();
-						var condition1 = "(amino1_symbol ='"+first1+"' ";
-						aminoAcids1.forEach(amino => {
-							condition1 += "OR amino1_symbol ='"+amino+"' ";
-						});
-						condition1 += ")";
-						
-						query = query.replaceAll('<<condition 1>>', condition1);
-						query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+amino+"'")
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-				}
-	
-				// Check if the last amino is a unique amino
-				else{
-					// Check if the current amino is a Any amino
-					if(amino.toUpperCase() == 'X'){
-						var query = amino_next_amino_any;
-						query = query.replaceAll('<<amino id>>', (this.index).toString())
-						query = query.replaceAll('<<amino_any id>>', (this.index + 1).toString())
-						query = query.replaceAll('<<condition>>', "amino1_symbol ='"+this.lastAmino+"'")
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a except
-					else if(amino.includes('{') && amino.includes('}')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids2 = amino.replace('{', '').replace('}', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol !='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "AND amino2_symbol !='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-						query = query.replaceAll('<<condition 2>>', condition2)
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a group
-					else if(amino.includes('[') && amino.includes(']')){
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-						query = query.replaceAll('<<amino 2 id>>', (this.index + 1).toString())
-	
-						// remove the curly brackets and iterate over the amino acids
-						var aminoAcids2 = amino.replace('[', '').replace(']', '').split('');
-						var first2 = aminoAcids2.shift();
-						var condition2 = "(amino2_symbol ='"+first2+"' ";
-						aminoAcids2.forEach(amino => {
-							condition2 += "OR amino2_symbol ='"+amino+"' ";
-						});
-						condition2 += ")";
-						query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-						query = query.replaceAll('<<condition 2>>', condition2)
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-	
-					// Check if the current amino is a unique amino
-					else{
-						var query = amino_next_amino;
-						query = query.replaceAll('<<amino 1 id>>', (this.index).toString())
-						query = query.replaceAll('<<amino 2 id>>', (this.index+1).toString())
-						query = query.replaceAll('<<condition 1>>', "amino1_symbol ='"+this.lastAmino+"'")
-						query = query.replaceAll('<<condition 2>>', "amino2_symbol ='"+amino+"'")
-						this.queries.push(query)
-						this.lastAmino = amino
-						this.index += 1;
-					}
-				}
-			}
-		}
 	}
 
 
@@ -788,11 +92,6 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#aminorepetitionextension.
 	exitAminorepetitionextension(ctx) {
-		var components = ctx.getText().split('(');
-		var minmax = components[1].replace(')', '').split(',');
-
-		var rep = new repExt(this.index, this.index + 1, minmax[0], minmax[1]);
-		this.repetitions.push(rep);
 	}
 
 
@@ -838,6 +137,15 @@ export default class ExprListener extends antlr4.tree.ParseTreeListener {
 
 	// Exit a parse tree produced by ExprParser#patternend.
 	exitPatternend(ctx) {
+	}
+
+
+	// Enter a parse tree produced by ExprParser#character.
+	enterCharacter(ctx) {
+	}
+
+	// Exit a parse tree produced by ExprParser#character.
+	exitCharacter(ctx) {
 	}
 
 

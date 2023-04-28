@@ -11,7 +11,10 @@ import { NgxNotifierService } from 'ngx-notifier';
 export class MinMaxGapComponent implements OnInit{
     @Input() data: any;
 
-    minmaxForm: FormGroup;
+    minmaxForm: FormGroup = new FormGroup({
+        min: new FormControl(0, { validators: Validators.required }),
+        max: new FormControl(1, { validators: Validators.required })
+    });
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -37,9 +40,17 @@ export class MinMaxGapComponent implements OnInit{
 
     onClose(result: any){
         if(result === 'close'){
-            this.activeModal.close(0);
+            this.activeModal.close('cancel');
         }
         if(result === 'success'){
+            if(this.minmaxForm.value.min === this.minmaxForm.value.max){
+                this.notifier.createToast('Min value must be different from Max value.', 'danger', 3000);
+                return;
+            }
+            if(this.minmaxForm.value.min < 0 || this.minmaxForm.value.max < 1){
+                this.notifier.createToast('Min value must be greater than 0 and Max value must be greater than 1.', 'danger', 3000);
+                return;
+            }
             if(this.minmaxForm.valid){
                 if(this.minmaxForm.value.min > this.minmaxForm.value.max){
                     this.notifier.createToast('Min value must be less than Max value.', 'danger', 3000);
@@ -54,7 +65,7 @@ export class MinMaxGapComponent implements OnInit{
         if(this.data){
             this.activeModal.close([this.minmaxForm.value.min, this.minmaxForm.value.max])
         }
-        this.activeModal.close(0);
+        this.activeModal.close('cancel');
     }
 
 }

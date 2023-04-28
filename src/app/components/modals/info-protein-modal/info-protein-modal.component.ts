@@ -23,7 +23,7 @@ export class InfoProteinModalComponent implements OnInit{
     }
 
     seeProtein(){
-        this.router.navigateByUrl('prosite4pdb/protein/' + this.protein.id + '/' + this.pattern);
+        this.router.navigateByUrl('protein/' + this.protein.id + '/' + this.pattern);
         this.activeModal.close('redirect_protein');
     }
 

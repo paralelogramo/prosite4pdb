@@ -29,8 +29,7 @@
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -93,6 +92,16 @@
               "src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "prosite4pdb:build:production",
+            "firebaseProject": "thesispdb",
+            "firebaseHostingSite": "thesispdb"
           }
         }
       }

@@ -4,8 +4,8 @@ export interface AminoGraph {
     fx: number;
     y: number;
     fy: number;
-    img: any;
     isGroup: boolean;
     isExcept: boolean;
-    aminos: string[];
+    data: string[];
+    // isLigand: boolean;
 }

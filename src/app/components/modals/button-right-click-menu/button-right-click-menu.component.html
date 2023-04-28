@@ -1,7 +1,7 @@
 <div class="contextmenu" [ngStyle]="{'left.px': x, 'top.px': y}">
     <div class="btn-group-vertical container-buttons" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-outline-secondary btn-custom" (click)="action('next')">Add Next Link</button>
-        <button type="button" class="btn btn-outline-secondary btn-custom" (click)="action('gap')">Add Gap Link</button>
+        <button *ngIf="!isLigand" type="button" class="btn btn-outline-secondary btn-custom" (click)="action('gap')">Add Gap Link</button>
         <button type="button" class="btn btn-outline-secondary btn-custom" (click)="action('delete')">Delete Node</button>
       </div>
 </div>
