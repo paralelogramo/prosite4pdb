@@ -881,9 +881,7 @@ export class CanvasComponent implements OnInit{
     // READY
     onPageChange(event: any, content){
         this.closeModal = this.modalService.open(content, { centered: true, backdrop: 'static', keyboard: false, size: 'sm' });
-        let resultsGet = [];
         this.page = event;
-        this.results = [];
         let timerInterval = setInterval(() => {
             this.timer = this.timer + 10;
         }, 10);
