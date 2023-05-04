@@ -1,0 +1,89 @@
+.button-csv-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 0;
+    border: 2px solid rgb(0, 185, 151);
+    border-radius: 15px;
+    background-color: rgba(0, 130, 132, 0.035);
+}
+
+.button-txt-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 0;
+    border: 2px solid rgb(50, 50, 50);
+    border-radius: 15px;
+    background-color: rgba(50, 50, 50, 0.035);
+}
+
+.button-xlsx-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 0;
+    border: 2px solid rgb(29, 111, 66);
+    border-radius: 15px;
+    background-color: rgba(29, 111, 66, 0.035);
+}
+
+.color-csv {
+    color: #00A881;
+}
+
+.color-txt {
+    color: #101010;
+}
+
+.color-xlsx {
+    color: #1D6F42;
+}
+
+.button-csv-container:hover {
+    background-color: rgba(0, 185, 151, 0.1);
+}
+
+.button-txt-container:hover {
+    background-color: rgba(50, 50, 50, 0.1);
+}
+
+.button-xlsx-container:hover {
+    background-color: rgba(29, 111, 66, 0.1);
+}
+
+.button-csv-container:active {
+    background-color: rgba(0, 185, 151, 0.3);
+}
+
+.button-txt-container:active {
+    background-color: rgba(50, 50, 50, 0.3);
+}
+
+.button-xlsx-container:active {
+    background-color: rgba(29, 111, 66, 0.3);
+}
+
+.icon {
+    width: 50px;
+    height: auto;
+}
+
+.no-select-text {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.card-title {
+    font-size: 18px;
+}

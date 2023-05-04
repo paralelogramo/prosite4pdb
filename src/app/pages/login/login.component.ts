@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit{
     ) {}
   
     ngOnInit() {
+        this.cookieService.check('accessToken') ? this.router.navigateByUrl('/tool') : null;
         this.loginForm = new FormGroup({
             email: new FormControl(''),
             password: new FormControl(''),
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit{
             let expired = time + 1000 * 60 * 60 * 8;
             now.setTime(expired);
             this.cookieService.set('accessToken', result.user['auth'].currentUser.accessToken, now);
-            this.ngxNotifierService.createToast('You are successfully logged in', 'success', 3000);
+            this.ngxNotifierService.createToast('You are successfully logged in. Your session has a duration of 8 hours.', 'success', 5000);
             this.router.navigateByUrl('/tool');
         })
         .catch((error) => {

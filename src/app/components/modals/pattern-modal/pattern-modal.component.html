@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="modal-header justify-content-center">
+        <h2>Pattern</h2>
+    </div>
+    <div class="modal-body">
+        <ngb-carousel [interval]="0" [showNavigationArrows]="true" [showNavigationIndicators]="false">
+            <ng-template ngbSlide class="slide">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-tutorial-container">
+                            <div class="texts">
+                                <p><b>The definition of the patterns is defined according to the PROSITE definition, adding extensions concerning the ligands and their function.</b></p>
+                                <p><b>For more information on PROSITE's Pattern Line (PALine) definition <a href="https://prosite.expasy.org/prosuser.html#conv_pa" target="_blank">click here</a>.</b></p>
+                                <p><b>For more information on the definition of PROSITE you can read the article <a href="https://www.researchgate.net/publication/11160013_PROSITE_A_documented_database_using_patterns_and_profiles_as_motif_descriptors" target="_blank">click here</a>.</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template ngbSlide class="slide" *ngFor="let ps of patternSlides">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="image-tutorial-container">
+                            <img class="ligand-image" src={{ps.imageURL}}>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-tutorial-container">
+                            <div class="texts">
+                                <p *ngFor="let text of ps.texts">
+                                    <b>{{text}}</b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="onClose()">Close</button>
+    </div>
+</div>

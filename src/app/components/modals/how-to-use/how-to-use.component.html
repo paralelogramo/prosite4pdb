@@ -1,10 +1,180 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6 img-col">
-            <img src="../../../../assets/under_construction.png" class="under-construction-image">
+<div class="container">
+    <div class="modal-header justify-content-center">
+        <h2>How to Use PPSS</h2>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="tutorialSelected == 'none'" class="row">
+            <div class="col-md-4">
+                <!-- Esta va a ser para el tutorial de ligandos -->
+                <div class="button-ligand-container" (click)="changeView('ligand')">
+                    <svg class="icon" viewBox="0 0 24 24" data-name="025_SCIENCE"
+                        id="_025_SCIENCE" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #333;
+                                }
+                            </style>
+                        </defs>
+                        <path class="cls-1"
+                            d="M12,22.24a1,1,0,0,1-.5-.14l-8-4.62a1,1,0,0,1-.5-.86V7.38a1,1,0,0,1,.5-.86l8-4.62a1,1,0,0,1,1,0l8,4.62a1,1,0,0,1,.5.86v9.24a1,1,0,0,1-.5.86l-8,4.62A1,1,0,0,1,12,22.24ZM5,16l7,4,7-4V8l-7-4L5,8Z" />
+                        <path class="cls-1"
+                            d="M12,19a1,1,0,0,1-1-1V12a1,1,0,0,1,.49-.86l5-3a1,1,0,0,1,1,1.72L13,12.57V18A1,1,0,0,1,12,19Z" />
+                        <path class="cls-1" d="M12,13a1,1,0,0,1-.51-.14l-5-3a1,1,0,0,1,1-1.72l5,3A1,1,0,0,1,12,13Z" />
+                    </svg>
+                    <h3 class="card-title no-select-text">
+                        Ligands
+                    </h3>
+                </div>
+            </div>
+           
+            <div class="col-md-4">
+                <!-- Esta va a ser para el tutorial de grafos -->
+                <div class="button-graph-container" (click)="changeView('graph')">
+                    <svg class="icon" viewBox="0 0 24 24" data-name="025_SCIENCE" id="_025_SCIENCE"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #333;
+                                }
+                            </style>
+                        </defs>
+                        <path class="cls-1" d="M6,9A3,3,0,1,1,9,6,3,3,0,0,1,6,9ZM6,5A1,1,0,1,0,7,6,1,1,0,0,0,6,5Z" />
+                        <path class="cls-1" d="M12,15a3,3,0,1,1,3-3A3,3,0,0,1,12,15Zm0-4a1,1,0,1,0,1,1A1,1,0,0,0,12,11Z" />
+                        <path class="cls-1" d="M18,9a3,3,0,1,1,3-3A3,3,0,0,1,18,9Zm0-4a1,1,0,1,0,1,1A1,1,0,0,0,18,5Z" />
+                        <path class="cls-1" d="M18,21a3,3,0,1,1,3-3A3,3,0,0,1,18,21Zm0-4a1,1,0,1,0,1,1A1,1,0,0,0,18,17Z" />
+                        <path class="cls-1" d="M6,21a3,3,0,1,1,3-3A3,3,0,0,1,6,21Zm0-4a1,1,0,1,0,1,1A1,1,0,0,0,6,17Z" />
+                        <rect class="cls-1" height="4.83" transform="translate(-3.73 9) rotate(-45)" width="2" x="8" y="6.59" />
+                        <rect class="cls-1" height="2" transform="translate(-1.97 13.24) rotate(-45)" width="4.83" x="12.59" y="8" />
+                        <rect class="cls-1" height="2" transform="translate(-7.97 10.76) rotate(-45)" width="4.83" x="6.59" y="14" />
+                        <rect class="cls-1" height="4.83" transform="translate(-6.21 15) rotate(-45)" width="2" x="14" y="12.59" />
+                    </svg>
+                    <h3 class="card-title no-select-text">
+                        Graph
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- Esta va a ser para el tutorial de texto -->
+                <div class="button-text-container" (click)="changeView('text')">
+                    <svg class="icon" fill="#333" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="m742.81 1024.051 185.984-512h62.336l186.112 512H742.81Zm605.056 469.888 120.32-43.776-387.328-1066.112H839.194L451.866 1450.163l120.32 43.776 124.16-341.888h527.36l124.16 341.888ZM1792 1728.051c0 35.2-28.672 64-64 64H192c-35.328 0-64-28.8-64-64v-1536c0-35.2 28.672-64 64-64h1536c35.328 0 64 28.8 64 64v1536Zm-64-1728H192c-105.856 0-192 86.144-192 192v1536c0 105.856 86.144 192 192 192h1536c105.856 0 192-86.144 192-192v-1536c0-105.856-86.144-192-192-192Z"
+                            fill-rule="evenodd" />
+                    </svg>
+                    <h3 class="card-title no-select-text">
+                        Text
+                    </h3>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 text-col">
-            <p class="text">This place it's under construction!</p>
+
+        <div *ngIf="tutorialSelected == 'ligand'" class="row feature-tutorial-ligand">
+            <ngb-carousel [interval]="0" [showNavigationArrows]="true" [showNavigationIndicators]="false">
+                
+                <ng-template ngbSlide class="slide" *ngFor="let ls of ligandSlides">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-tutorial-container">
+                                <img class="ligand-image" src={{ls.imageURL}}>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-tutorial-container">
+                                <div class="texts">
+                                    <p *ngFor="let text of ls.texts">
+                                        <b>{{text}}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </ngb-carousel>
         </div>
+        
+        <div *ngIf="tutorialSelected == 'graph'" class="row feature-tutorial-graph">
+            <ngb-carousel [interval]="0" [showNavigationArrows]="true" [showNavigationIndicators]="false">
+            
+                <ng-template ngbSlide class="slide" *ngFor="let gs of graphSlides">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-tutorial-container">
+                                <img class="ligand-image" src={{gs.imageURL}}>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-tutorial-container">
+                                <div class="texts">
+                                    <p *ngFor="let text of gs.texts">
+                                        <b>{{text}}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            
+            </ngb-carousel>
+        </div>
+        
+        <div *ngIf="tutorialSelected == 'text'" class="row feature-tutorial-text">
+            <ngb-carousel [interval]="0" [showNavigationArrows]="true" [showNavigationIndicators]="false">
+                <ng-template ngbSlide class="slide" *ngFor="let ts of textSlides">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-tutorial-container">
+                                <img class="ligand-image" src={{ts.imageURL}}>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-tutorial-container">
+                                <div class="texts">
+                                    <p *ngFor="let text of ts.texts">
+                                        <b>{{text}}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- <ng-template ngbSlide class="slide">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="image-tutorial-container-sp">
+                                <img class="ligand-image-sp" src='../../../../assets/tutorial/text-5.png'>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-tutorial-container">
+                                <div class="texts">
+                                    <p>
+                                        <b> Each amino has a representation of 3 letters and 1 letter. </b>
+                                    </p>
+                                    <p>
+                                        <b> The 1 letter is used to form the text patterns of the tool and the 3 letters are used to
+                                            visualize the nodes. </b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="image-tutorial-container-sp">
+                                <img class="ligand-image-sp" src='../../../../assets/tutorial/text-6.png'>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template> -->
+            
+            </ngb-carousel>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button *ngIf="tutorialSelected != 'none'" type="button" class="btn btn-outline-primary" (click)="goBack()">Back</button>
+        <button type="button" class="btn btn-outline-primary" (click)="onClose()">Close</button>
     </div>
 </div>

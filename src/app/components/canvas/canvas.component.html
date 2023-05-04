@@ -1,16 +1,84 @@
 <div id="base" class="container-fluid container-custom">
     <div class="canvas-container">
 
-        <div id="canvasID" class="canvas" (window:resize)="onResize($event)">
+        <div #canvasID id="canvasID" class="canvas" (window:resize)="onResize($event)">
             <div class='canvasGraph' id="canvasGraph">
             </div>
             <div class="ligand-container">
-                <button
-                    type="button"
-                    class="btn btn-ligand-activated"
-                    (click)="selectLigands()">
+                <button type="button" class="btn btn-ligand-activated" (click)="selectLigands()">
                     {{ligandList | customTextLigand}}
                 </button>
+            </div>
+            <div class="move-system-container">
+                <div class="menu-move-zoom">
+                    <div class="item-1">
+                        <svg (mouseup)="clearInterval()" (mousedown)="zoomOut()" (mouseleave)="clearInterval()" class="icon-move" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Dribbble-Light-Preview" transform="translate(-379.000000, -520.000000)" fill="#006CA8">
+                                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                                        <path
+                                            d="M329.3,371 L337.7,371 L337.7,369 L329.3,369 L329.3,371 Z M333.5,378 C328.8674,378 325.1,374.411 325.1,370 C325.1,365.588 328.8674,362 333.5,362 C338.13155,362 341.9,365.588 341.9,370 C341.9,374.411 338.13155,378 333.5,378 L333.5,378 Z M333.5,360 C327.70085,360 323,364.477 323,370 C323,375.523 327.70085,380 333.5,380 C339.2981,380 344,375.523 344,370 C344,364.477 339.2981,360 333.5,360 L333.5,360 Z"
+                                            id="minus_circle-[#1442]"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-2">
+                        <svg (mouseup)="clearInterval()" (mousedown)="up()" (mouseleave)="clearInterval()" class="icon-move" viewBox="2 2 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="Arrow / Arrow_Circle_Up">
+                                <path id="Vector"
+                                    d="M15 11L12 8M12 8L9 11M12 8V16M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12Z"
+                                    stroke="#006CA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-3">
+                        <svg (mouseup)="clearInterval()" (mousedown)="zoomIn()" (mouseleave)="clearInterval()" class="icon-move" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Dribbble-Light-Preview" transform="translate(-419.000000, -520.000000)" fill="#006CA8">
+                                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                                        <path
+                                            d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                                            id="plus_circle-[#1441]"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-4">
+                        <svg (mouseup)="clearInterval()" (mousedown)="left()" (mouseleave)="clearInterval()" class="icon-move" viewBox="2 2 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="Arrow / Arrow_Circle_Left">
+                                <path id="Vector"
+                                    d="M11 9L8 12M8 12L11 15M8 12H16M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12Z"
+                                    stroke="#006CA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-5"></div>
+                    <div class="item-6">
+                        <svg (mouseup)="clearInterval()" (mousedown)="right()" (mouseleave)="clearInterval()" class="icon-move" viewBox="2 2 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="Arrow / Arrow_Circle_Right">
+                                <path id="Vector"
+                                    d="M13 15L16 12M16 12L13 9M16 12H8M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12Z"
+                                    stroke="#006CA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-7"></div>
+                    <div class="item-8">
+                        <svg (mouseup)="clearInterval()" (mousedown)="down()" (mouseleave)="clearInterval()" class="icon-move" viewBox="2 2 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="Arrow / Arrow_Circle_Down">
+                                <path id="Vector"
+                                    d="M9 13L12 16M12 16L15 13M12 16V8M21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12Z"
+                                    stroke="#006CA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="item-9"></div>
+                </div>
             </div>
             <div class="contextMenu" *ngIf="canvasContextMenu">
                 <app-canvas-right-click-menu
@@ -43,108 +111,133 @@
                     <form [formGroup]="inputPatternForm">
                         <div class="inputWithSufix">
                             <input type="text" class="form-control input-custom" placeholder="[ZN,S04]:V(1,2)-x(3)-R-X-[ARN]" formControlName="pattern">
+                            <img
+                                placement="top" ngbTooltip={{errorMsg}}
+                                [ngClass]="{ 'check-error-img-not': checkError == 'not', 'check-error-img-suc': checkError == 'suc', 'check-error-img-err': checkError == 'err' }" 
+                                class="check-error-img"
+                                src="{{checkErrorImg}}"
+                                alt="check-error">
                         </div>
                     </form>
                 </div>
                 <div class="search-container col-md-1 col-sm-6">
                     <button type="button" class="btn btn-outline-primary btn-custom" (click)="searchFirstGroupPattern(content)"
                         [disabled]="!correctInput">
-                        <img class="search-icon" src="../../../assets/search-icon.png">
+                        <img class="search-icon" src="./assets/search-icon.png">
                     </button>
                 </div>
                 <div class="configQuery-container col-md-1 col-sm-6">
                     <button type="button" class="btn btn-outline-primary btn-custom" (click)="openConfigQueryModal()">
-                        <img class="search-icon" src="../../../assets/config.png">
+                        <img class="search-icon" src="./assets/config.png">
                     </button>
                 </div>
-                
-                <!-- <img class="text-input-state" src="../../../assets/input-no-check.png"> -->
             </div>
         </div>
     </div>
 
     <hr *ngIf="results.length != 0" class="hr hr-custom" />
 
-    <div class="results-container h-75 custom-res">
-        <!-- <div class="row">
-            <div class="container filters-container">
-                <div class="col-md-4">
-                    <form>
-                        <div class="form-group form-inline">
-                            Search country by name: 
-                            <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="searchTerm"
-                            (input)="search($event.target.value)" />
-                        </div>
-                    </form>
-                    <input id="table-filtering-search" placeholder="Search on table..." class="form-control" type="text" [formControl]="filter" />
-                </div>
+    <div *ngIf="results.length != 0" class="row container-fluid filter-container">
+        <div class="col-md-12 title-filter-container">
+            <h3>Filter Table</h3>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input [(ngModel)]="filterID" (ngModelChange)="filterTable(filterID, 'id')" type="text" class="input-custom-2 form-control" id="inputId" placeholder="ID">
             </div>
-        </div> -->
-        <div *ngIf="results.length != 0" class="row" id="resultsTable">
-            <div class="col-md-12 container-custom-table">
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="table-header" style="width: 5%;" scope="col">ID</th>
-                        <th class="table-header" style="width: 25%;" scope="col">TITLE</th>
-                        <th class="table-header" style="width: 18%;" scope="col">CLASSIFICATION</th>
-                        <th class="table-header" style="width: 18%;" scope="col">ORGANISM</th>
-                        <th class="table-header" style="width: 34%;" scope="col">PATTERN</th>
-                        <th class="table-header" style="width: 10%;" scope="col">ACTION</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                      <tr *ngFor="let protein of results">
-                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.id}}>{{ protein.id }}</p> </td>
-                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.title}}>{{ protein.title }}</p> </td>
-                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.classification}}>{{ protein.classification }}</p> </td>
-                        <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.organism}}>{{ protein.organism }}</p> </td>
-                        <td class="td-row-table"> 
-                            <p *ngIf="protein.pattern != ''; else elseBlock" class="result-text" placement="top" ngbTooltip={{protein.pattern}}>
-                                {{ protein.pattern }}
-                            </p>
-                            <ng-template #elseBlock>
-                                    <div id="js-preloader" class="js-preloader">
-                                        <div class="preloader-inner">
-                                            <span class="dot"></span>
-                                            <div class="dots">
-                                                <span></span>
-                                                <span></span>
-                                                <span></span>
-                                            </div>
-                                        </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <input [(ngModel)]="filterTitle" (ngModelChange)="filterTable(filterTitle, 'title')" type="text" class="input-custom-2 form-control" id="inputId" placeholder="Title">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input [(ngModel)]="filterClassification" (ngModelChange)="filterTable(filterClassification, 'classification')" type="text" class="input-custom-2 form-control" id="inputId" placeholder="Classification">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input [(ngModel)]="filterOrganism" (ngModelChange)="filterTable(filterOrganism, 'organism')" type="text" class="input-custom-2 form-control" id="inputId" placeholder="Organism">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <input [(ngModel)]="filterPattern" (ngModelChange)="filterTable(filterPattern, 'pattern')"  type="text" class="input-custom-2 form-control" id="inputId" placeholder="Pattern">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-outline-primary btn-custom" (click)="downloadData()">Download Results</button>
+        </div>
+    </div>
+
+    <hr *ngIf="results.length != 0" class="hr hr-custom" />
+
+    <div *ngIf="results.length != 0" class="row" id="resultsTable">
+        <div class="col-md-12 container-custom-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th class="table-header column-static-width-5" scope="col">ID</th>
+                    <th class="table-header column-static-width-20" scope="col">TITLE</th>
+                    <th class="table-header column-static-width-15" scope="col">CLASSIFICATION</th>
+                    <th class="table-header column-static-width-15" scope="col">ORGANISM</th>
+                    <th class="table-header column-static-width-30" scope="col">PATTERN</th>
+                    <th class="table-header column-static-width-15 align" scope="col">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr *ngFor="let protein of paginateResults">
+                    <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.id}}>{{ protein.id }}</p> </td>
+                    <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.title}}>{{ protein.title }}</p> </td>
+                    <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.classification}}>{{ protein.classification }}</p> </td>
+                    <td class="td-row-table"> <p class="result-text" placement="top" ngbTooltip={{protein.organism}}>{{ protein.organism }}</p> </td>
+                    <td class="td-row-table"> 
+                        <p *ngIf="protein.pattern != ''; else elseBlock" class="result-text" placement="top" ngbTooltip={{protein.pattern}}>
+                            {{ protein.pattern }}
+                        </p>
+                        <ng-template #elseBlock>
+                            <div id="js-preloader" class="js-preloader">
+                                <div class="preloader-inner">
+                                    <span class="dot"></span>
+                                    <div class="dots">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
                                     </div>
-                            </ng-template>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-custom" (click)="openProteinPDB(protein)" disabled placement="top" ngbTooltip='En Construccion'>
-                                <img class="search-icon" src="../../../assets/goToPDB.png">
-                            </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                </table>
-                <div class="row container-pagination-custom" *ngIf="results.length != 0">
-                    <div class="col-md-12 d-flex justify-content-center">
-                        <ngb-pagination
-                            [collectionSize]="collectionSize"
-                            [(page)]="page"
-                            [maxSize]="5"
-                            [pageSize]="pageSize"
-                            [rotate]="true"
-                            [ellipses]="false"
-                            [boundaryLinks]="true"
-                            size="lg"
-                            (pageChange)="onPageChange($event, content)"
-                        >
-                            <ng-template ngbPaginationFirst>First</ng-template>
-                            <ng-template ngbPaginationLast>Last</ng-template>
-                            <ng-template ngbPaginationPrevious>Prev</ng-template>
-                            <ng-template ngbPaginationNext>Next</ng-template>
-                            <ng-template ngbPaginationEllipsis>...</ng-template>
-                            <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
-                        </ngb-pagination>
-                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-watch-custom" (click)="openProteinPDB(protein)" disabled placement="top" ngbTooltip='En Construccion'>
+                            Watch
+                        </button>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row container-pagination-custom" *ngIf="results.length != 0">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <ngb-pagination
+                        [collectionSize]="collectionSize"
+                        [(page)]="page"
+                        [maxSize]="5"
+                        [pageSize]="pageSize"
+                        [rotate]="true"
+                        [ellipses]="false"
+                        [boundaryLinks]="true"
+                        size="lg"
+                        (pageChange)="onPageChange($event)"
+                    >
+                        <ng-template ngbPaginationFirst>First</ng-template>
+                        <ng-template ngbPaginationLast>Last</ng-template>
+                        <ng-template ngbPaginationPrevious>Prev</ng-template>
+                        <ng-template ngbPaginationNext>Next</ng-template>
+                        <ng-template ngbPaginationEllipsis>...</ng-template>
+                        <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+                    </ngb-pagination>
                 </div>
             </div>
         </div>
@@ -155,7 +248,7 @@
     <div class="modal-body">
         <h3 class="modal-title col-12 text-center" id="modal-basic-title">{{searchingTitleText}}</h3>
         <div class="div text-center" style="margin-top: 15px;">
-            <img src="../../../assets/loadIcons/{{loadIcon}}.gif" alt="{{loadIcon}}" class="molecules_gif">
+            <img src="./assets/loadIcons/{{loadIcon}}.gif" alt="{{loadIcon}}" class="molecules_gif">
             <h5 class="modal-title text-center load-msg">{{loadMessage}}</h5>
             <h6 class="timer-text text-center">Query Time: {{timer|date:'mm:ss:SSS'}}</h6>
         </div>

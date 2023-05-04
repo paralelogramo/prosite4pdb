@@ -1,24 +1,23 @@
-<div class="main">
-    <div class="navbar-container">
-        <app-navbar></app-navbar>
-    </div>
-
-    <div class="custom-container">
-        <div class="not-found">
-            <div class="row text-center justify-content-center display-flex">
-                <div class="col-md-6 error-404-img">
-                    <img src="../../../assets/loadIcons/hazmat.gif" class="error-img">
-                </div>
-                <div class="col-md-6 error-404-text">
-                    <p class="ups-text">Ups!</p>
-                    <p>Can't find the page you are looking for.</p>
+<div class="container">
+    <div class="not-found">
+        <div class="row">
+            <div class="col-md-6 justify-content-center align-items-center d-flex">
+                <div class="gif-container">
+                    <img src="../../../assets/loadIcons/hazmat.gif" class="error-404-img">
                 </div>
             </div>
-            <div class="row">
-                <p>Please redirect to the home page!</p>
-            </div>
-            <div class="row">
-                <button class="primary">Redirect</button>
+            <div class="col-md-6 justify-content-center align-items-center d-flex">
+                <div class="error-404">
+                    <div class="text-container">
+                        <h1 class="error-404-subtitle"><b>Page not found</b></h1>
+                        <br>
+                        <h3 class="error-404-text">The page you are looking for might have been removed,
+                            had its name changed or is temporarily unavailable.</h3>
+                    </div>
+                    <div class="button-container">
+                        <a href="/login" class="btn btn-outline-dark btn-lg">Come Back</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

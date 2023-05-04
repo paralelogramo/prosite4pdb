@@ -5,18 +5,18 @@
     border-radius: 15px;
 }
 
-.under-construction-image{
+.under-construction-image {
     width: 15vw;
     height: auto;
 }
 
-.text-col{
+.text-col {
     display: grid;
     place-items: center;
     padding: 15px 0;
 }
 
-.text{
+.text {
     font-size: 3vw;
     font-weight: 600;
     text-align: center;
@@ -24,7 +24,7 @@
 
 .button-ligand-container,
 .button-graph-container,
-.button-text-container{
+.button-text-container {
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -42,16 +42,16 @@
     background-color: rgba(0, 108, 168, 0.1);
 }
 
-.icon{
+.icon {
     width: 50px;
     height: auto;
 }
 
-.card-title{
+.card-title {
     color: #333;
 }
 
-.no-select-text{
+.no-select-text {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -60,21 +60,15 @@
     user-select: none;
 }
 
-.slide{
+.slide {
     padding: 0px 4%;
 }
 
 .ligand-image {
     width: 100%;
     height: auto;
-    border-radius: 15px;
-    border: 2px solid #006ca8;
 }
 
-.ligand-image-sp {
-    width: 100%;
-    height: auto;
-}
 
 .image-tutorial-container {
     width: 100%;
@@ -84,16 +78,7 @@
     place-items: center;
 }
 
-.image-tutorial-container-sp {
-    width: 100%;
-    height: calc(100% - 5px);
-    position: relative;
-    display: grid;
-    place-items: center;
-    background-color: red;
-}
-
-.text-tutorial-container{
+.text-tutorial-container {
     text-align: center;
     display: grid;
     place-items: center;
@@ -101,9 +86,10 @@
 }
 
 @media screen and (max-width: 768px) {
+
     .button-ligand-container,
     .button-graph-container,
-    .button-text-container{
+    .button-text-container {
         padding: 3vh 0;
         gap: 15px;
     }
@@ -116,5 +102,5 @@
     .row {
         gap: 15px;
     }
-    
+
 }

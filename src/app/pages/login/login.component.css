@@ -97,6 +97,12 @@
     transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
 }
 
+.input_field:hover {
+    border: 1px solid transparent;
+    box-shadow: 0px 0px 0px 1px #242424;
+    background-color: transparent;
+}
+
 .input_field:focus {
     border: 1px solid transparent;
     box-shadow: 0px 0px 0px 2px #242424;
@@ -112,6 +118,7 @@
     outline: none;
     color: #ffffff;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 .sign-in_ggl {
@@ -167,4 +174,8 @@
     font-size: 0.75rem;
     color: #8B8E98;
     text-decoration: underline;
+}
+
+ngx-notifier{
+    z-index: 9999 !important;
 }

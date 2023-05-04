@@ -1,6 +1,5 @@
-.navbar-custom {
-    background-color: rgb(34, 34, 34);
-    width: 100%;
+.navbar-z-index {
+    z-index: 8;
 }
 
 .name-container {

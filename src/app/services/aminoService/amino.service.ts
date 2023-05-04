@@ -10,25 +10,50 @@ export class AminoService {
 
   	constructor(private http: HttpClient) { }
 
-	getResultsByPattern(pattern: string, limit: number, offset: number): any {
+	getResultsByPattern(pattern: string): any {
+		let headers = new HttpHeaders()
+		headers=headers.append('content-type','application/json')
+		headers=headers.append('Access-Control-Allow-Origin', '*')
+		headers=headers.append('content-type','application/x-www-form-urlencoded')
+
 		pattern = pattern.replaceAll(",", ";")
-		return this.http.get<any>(`${this.host}/getProteinsByPattern?pattern="${pattern}"&limit=${limit}&offset=${offset}`);
+		return this.http.get<any>(`${this.host}/getProteinsByPattern?pattern="${pattern}"`, { headers: headers });
 	}
 
 	getTotalResultsByPattern(pattern: string): any {
+		let headers = new HttpHeaders()
+		headers=headers.append('content-type','application/json')
+		headers=headers.append('Access-Control-Allow-Origin', '*')
+		headers=headers.append('content-type','application/x-www-form-urlencoded')
+
 		pattern = pattern.replaceAll(",", ";")
-		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern?pattern=${pattern}`);
+		return this.http.get<any>(`${this.host}/getTotalProteinsByPattern?pattern=${pattern}`, { headers: headers });
 	}
 
 	getProteinByID(id: string): any {
-		return this.http.get<any>(`${this.host}/getProteinByID?id=${id}`);
+		let headers = new HttpHeaders()
+		headers=headers.append('content-type','application/json')
+		headers=headers.append('Access-Control-Allow-Origin', '*')
+		headers=headers.append('content-type','application/x-www-form-urlencoded')
+
+		return this.http.get<any>(`${this.host}/getProteinByID?id=${id}`, { headers: headers });
 	}
 
 	getListLigands(){
-		return this.http.get<any>(`${this.host}/getListLigands`);
+		let headers = new HttpHeaders()
+		headers = headers.append('content-type', 'application/json')
+		headers = headers.append('Access-Control-Allow-Origin', '*')
+		headers = headers.append('content-type', 'application/x-www-form-urlencoded')
+
+		return this.http.get<any>(`${this.host}/getListLigands`, { headers: headers });
 	}
 
 	getListOfAminosByStartEnd(p_id: string, start: number, end: number){
-		return this.http.get<any>(`${this.host}/getListOfAminosByStartEnd?p_id=${p_id}&start=${start}&end=${end}`);
+		let headers = new HttpHeaders()
+		headers = headers.append('content-type', 'application/json')
+		headers = headers.append('Access-Control-Allow-Origin', '*')
+		headers = headers.append('content-type', 'application/x-www-form-urlencoded')
+
+		return this.http.get<any>(`${this.host}/getListOfAminosByStartEnd?p_id=${p_id}&start=${start}&end=${end}`, { headers: headers });
 	}
 }

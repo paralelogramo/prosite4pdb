@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
-import { NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './components/footer/footer.component';
 import { ToolComponent } from './pages/tool/tool.component';
 import { ResultsModalsComponent } from './components/modals/results/results.component';
@@ -37,6 +37,8 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { PatternModalComponent } from './components/modals/pattern-modal/pattern-modal.component';
+import { DownloadComponent } from './components/modals/download/download.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     MinMaxGapComponent,
     LoginComponent,
     SelectLigandComponent,
-    ConfigQueryComponent
+    ConfigQueryComponent,
+    PatternModalComponent,
+    DownloadComponent,
   ],
   imports: [
     BrowserModule,

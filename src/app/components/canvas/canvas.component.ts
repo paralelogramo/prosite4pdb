@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, PipeTransform, ViewChild } from '@angular/core';
 
 import { AminoGraph } from 'src/app/models/amino-graph.model';
 
@@ -12,11 +12,14 @@ import { NgxNotifierService } from 'ngx-notifier';
 import * as fg from 'force-graph';
 import { ModalSelectAminoComponent } from '../modals/modal-select-amino/modal-select-amino.component';
 import { InfoProteinModalComponent } from '../modals/info-protein-modal/info-protein-modal.component';
-import { pairwise, startWith, timeInterval } from 'rxjs';
+import { Observable, fromEvent, pairwise, startWith, timeInterval } from 'rxjs';
 import { Router } from '@angular/router';
 import { MinMaxGapComponent } from '../modals/min-max-gap/min-max-gap.component';
 import { ConfigQueryComponent } from '../modals/config-query/config-query.component';
 import { SelectLigandComponent } from '../modals/select-ligand/select-ligand.component';
+import { DownloadComponent } from '../modals/download/download.component';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 interface gapConstruct{
     source: number;
@@ -51,7 +54,7 @@ export class CanvasComponent implements OnInit{
             'message': 'Looking the Petri Dish',
             'icon': 'microorganism'
         },{
-            'message': 'Searching for Amino Acid Patterns',
+            'message': 'Searching Amino Acid Patterns',
             'icon': 'molecules'
         },{
             'message': 'Looking for Pockets',
@@ -77,6 +80,16 @@ export class CanvasComponent implements OnInit{
         }
     ]
 
+    filterID: string = '';
+    filterTitle: string = '';
+    filterClassification: string = '';
+    filterOrganism: string = '';
+    filterPattern: string = '';
+
+    checkErrorImg: string = '../../../assets/input-no-check.png';
+    checkError: string = 'not';
+    errorMsg = 'No Error';
+
     checkRefresh: boolean = false;
 
     loadMessage: string = '';
@@ -84,17 +97,21 @@ export class CanvasComponent implements OnInit{
 
     searchTerm: string;
     page = 1;
-    pageSize = 10;
+    pageSize = 8;
     results: any[] = [];
+    filteredResults: any[] = [];
+    paginateResults: any[] = [];
     collectionSize: number = this.results.length;
     correctInput: boolean = false;
     auxIndex = 1;
+    foundedPatterns: number = 0;
 
     closeModal: NgbModalRef;
     closeModalAminoSelect: NgbModalRef;
     closeModalSelectResult: NgbModalRef;
     closeModalSelectLigand: NgbModalRef;
     closeModalConfigQuery: NgbModalRef;
+    closeModalDownload: NgbModalRef;
     gaps: gapConstruct[] = [];
 
     canvasContextMenu = false;
@@ -114,6 +131,8 @@ export class CanvasComponent implements OnInit{
 
     graph = fg.default()
 
+    timeoutHandler;
+
     list_aminos: AminoGraph[] = [];
     links = [];
 
@@ -131,6 +150,10 @@ export class CanvasComponent implements OnInit{
     });
 
     filter = new FormControl('', { nonNullable: true });
+
+    @ViewChild('canvasID', { static: false }) el: ElementRef;
+    mouseDown$: Observable<any>;
+    mouseUp$: Observable<any>;
 
 
     constructor(
@@ -152,7 +175,7 @@ export class CanvasComponent implements OnInit{
         this.graph
         (document.getElementById('canvasGraph'))
         .graphData(data)
-        .zoom(25)
+        .zoom(15)
         .linkWidth(3)
         .linkDirectionalArrowLength(2)
         .linkDirectionalArrowRelPos(1.7)
@@ -250,38 +273,6 @@ export class CanvasComponent implements OnInit{
                 ctx.fillStyle = '#008717';
                 ctx.fillText('Except', node.x, node.y);
             }
-            // else if (node.isLigand){
-            //     if(node.data.length == 1){
-            //         ctx.beginPath();
-            //         ctx.fillStyle = '#3C2800';
-            //         ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
-            //         ctx.fill();
-            //         ctx.beginPath();
-            //         ctx.fillStyle = 'rgb(235, 235, 235)';
-            //         ctx.arc(node.x, node.y, 3.8, 0, 2 * Math.PI, false);
-            //         ctx.fill();
-            //         ctx.font = 'bold 1.5px Consolas';
-            //         ctx.textAlign = 'center';
-            //         ctx.textBaseline = 'middle';
-            //         ctx.fillStyle = '#3C2800';
-            //         ctx.fillText(node.data[0], node.x, node.y);
-            //     }
-            //     else{
-            //         ctx.beginPath();
-            //         ctx.fillStyle = '#3C2800';
-            //         ctx.arc(node.x, node.y, 4, 0, 2 * Math.PI, false);
-            //         ctx.fill();
-            //         ctx.beginPath();
-            //         ctx.fillStyle = 'rgb(235, 235, 235)';
-            //         ctx.arc(node.x, node.y, 3.8, 0, 2 * Math.PI, false);
-            //         ctx.fill();
-            //         ctx.font = 'bold 1.4px Consolas';
-            //         ctx.textAlign = 'center';
-            //         ctx.textBaseline = 'middle';
-            //         ctx.fillStyle = '#3C2800';
-            //         ctx.fillText('Ligands', node.x, node.y);
-            //     }
-            // }
             else {
                 if(node.data[0] == 'ANY') {
                     ctx.beginPath();
@@ -411,6 +402,7 @@ export class CanvasComponent implements OnInit{
                     this.closeModalAminoSelect.result.then((result) => {
                         if (result != 0 && result != 1) {
                             node.data = result;
+                            this.checkRefresh = true;
                             this.refreshText();
                         }
                     })
@@ -420,6 +412,7 @@ export class CanvasComponent implements OnInit{
                     this.closeModalAminoSelect.result.then((result) => {
                         if (result != 0 && result != 1) {
                             node.data = result;
+                            this.checkRefresh = true;
                             this.refreshText();
                         }
                     })
@@ -458,6 +451,7 @@ export class CanvasComponent implements OnInit{
                 });
             }
         })
+        .centerAt(0, 0)
 
 
         this.onResize(null);
@@ -528,7 +522,6 @@ export class CanvasComponent implements OnInit{
         var currentLigands = '';
 
         if (currentTextParts.length == 2){
-            // means that exists ligands
             currentLigands = currentTextParts[0] + ':';
         }
 
@@ -705,12 +698,19 @@ export class CanvasComponent implements OnInit{
         .subscribe(([prev, next]: [any, any]) => {
             let res = Parser(next.toUpperCase() + '.');
             if(next == ''){
+                this.checkError = 'not';
+                this.errorMsg = 'No Error';
+                this.checkErrorImg = '../../../assets/input-no-check.png';
                 this.graph.graphData({
                     nodes: [],
                     links: []
                 })
+                return
             }
             if(res.message === 'success'){
+                this.errorMsg = 'Correct Input';
+                this.checkError = 'suc';
+                this.checkErrorImg = '../../../assets/input-no-error.png';
                 if (next.toUpperCase().split('-').length == 1) {
                     if (!this.checkRefresh){
                         this.refreshCanvas(next)
@@ -727,6 +727,9 @@ export class CanvasComponent implements OnInit{
                 }
             }
             else{
+                this.checkError = 'err';
+                this.errorMsg = res.message + ' at column ' + res.column + '.';
+                this.checkErrorImg = '../../../assets/input-error.png';
                 this.correctInput = false;
             }
             this.checkRefresh = false;
@@ -812,7 +815,6 @@ export class CanvasComponent implements OnInit{
     // READY
     searchFirstGroupPattern(content) {
         this.page = 1;
-        let getResult = [];
         var index = Math.floor(Math.random() * this.loadMessages.length)
         this.loadMessage = this.loadMessages[index].message;
         this.loadIcon = this.loadMessages[index].icon;
@@ -836,14 +838,16 @@ export class CanvasComponent implements OnInit{
             },
             () => {
                 if (this.collectionSize === 0) {
-                    this.ngxNotifierService.createToast('No results found for pattern: ' + this.inputPatternForm.value.pattern, 'warning', 3000);
+                    this.ngxNotifierService.createToast('No results found for pattern: ' + this.inputPatternForm.value.pattern, 'danger', 3000);
                 }
                 else{
                     this.closeModal.result.then((result) => {}, (reason) => {});
-                    this.aminoService.getResultsByPattern(this.inputPatternForm.value.pattern.toUpperCase()+'.', this.pageSize, (this.page - 1) * this.pageSize)
+                    this.aminoService.getResultsByPattern(this.inputPatternForm.value.pattern.toUpperCase()+'.')
                     .subscribe((data: any) => {
 
                         this.results = data.data.map(item => ({ ...item, pattern:''}));
+                        this.filteredResults = this.results;
+                        this.onPageChange(1);
                         this.closeModal.close();
                         clearInterval(timerInterval);                        
 
@@ -868,10 +872,17 @@ export class CanvasComponent implements OnInit{
                             let max = Math.max(...realPattern)
                             let min = Math.min(...realPattern)
                             this.aminoService.getListOfAminosByStartEnd(res.protein_id, min, max).subscribe((pattern: any) => {
+                                this.foundedPatterns += 1;
                                 res['pattern'] = res.het_symbol + ' : ' + pattern.data[0].pattern;
                             });
                         });
-                        setTimeout(() => { window.scrollTo(0, window.outerHeight - 45); }, 500);
+                        setTimeout(() => { window.scrollTo(0, window.outerHeight); }, 500);
+                        let interval = setInterval(() => {
+                            if(this.foundedPatterns === this.results.length){
+                                clearInterval(interval);
+                                this.ngxNotifierService.createToast('All patterns have been found. You can now download the results.', 'success', 6000);
+                            }
+                        }, 200);
                     })
                 }
             });
@@ -879,35 +890,11 @@ export class CanvasComponent implements OnInit{
     }
 
     // READY
-    onPageChange(event: any, content){
-        this.closeModal = this.modalService.open(content, { centered: true, backdrop: 'static', keyboard: false, size: 'sm' });
+    onPageChange(event: any){
         this.page = event;
-        let timerInterval = setInterval(() => {
-            this.timer = this.timer + 10;
-        }, 10);
-        this.aminoService.getResultsByPattern(this.inputPatternForm.value.pattern.toUpperCase()+'.', this.pageSize, (this.page - 1) * this.pageSize).subscribe((data: any) => {
-            this.results = data.data.map(item => ({ ...item, pattern: '' }));
-            this.closeModal.close();
-            clearInterval(timerInterval);
-            this.timer = 0;
-        },
-        (error: any) => {
-
-        },
-        () => {
-            this.results.forEach(res => {
-                var keys = Object.keys(res).filter(string => string.includes('id') && string.includes('amino')).sort();
-                var realPattern: number[] = [];
-                keys.forEach(index => {
-                    realPattern.push(res[index].split('_')[2])
-                });
-                let max = Math.max(...realPattern)
-                let min = Math.min(...realPattern)
-                this.aminoService.getListOfAminosByStartEnd(res.protein_id, min, max).subscribe((pattern: any) => {
-                    res['pattern'] = res.het_symbol + ' : ' + pattern.data[0].pattern;
-                });
-            });
-        });
+        this.paginateResults = this.filteredResults
+        .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+        setTimeout(() => { window.scrollTo(0, window.outerHeight); }, 25);
     }
 
     // READY
@@ -926,7 +913,7 @@ export class CanvasComponent implements OnInit{
 
     // READY
     refreshCanvas(pattern: string){
-        var distanceX = 0;
+        var distanceX = -30;
         var distanceY = 0;
         var nodeList = [];
         this.gaps = [];
@@ -1166,5 +1153,173 @@ export class CanvasComponent implements OnInit{
         this.graph.width(divElement.offsetWidth-4);
         this.graph.height(divElement.offsetHeight-4);
         this.graph.zoomToFit();
+    }
+
+    // READY
+    up(){
+        this.timeoutHandler = setInterval(() => {
+            let coords = this.graph.screen2GraphCoords(this.graph.width() / 2, this.graph.height() / 2);
+            this.graph.centerAt(coords.x, coords.y + 0.2);
+        }, 20);
+    }
+
+    // READY
+    down(){
+        this.timeoutHandler = setInterval(() => {
+            let coords = this.graph.screen2GraphCoords(this.graph.width() / 2, this.graph.height() / 2);
+            this.graph.centerAt(coords.x, coords.y - 0.2);
+        }, 20);
+    }
+
+    // READY
+    left(){
+        this.timeoutHandler = setInterval(() => {
+            let coords = this.graph.screen2GraphCoords(this.graph.width() / 2, this.graph.height() / 2);
+            this.graph.centerAt(coords.x + 0.2, coords.y);
+        }, 20);
+    }
+
+    // READY
+    right(){
+        this.timeoutHandler = setInterval(() => {
+            let coords = this.graph.screen2GraphCoords(this.graph.width() / 2, this.graph.height() / 2);
+            this.graph.centerAt(coords.x - 0.2, coords.y);
+        }, 20);
+    }
+
+    // READY
+    zoomIn(){
+        this.timeoutHandler = setInterval(() => {
+            let zoom = this.graph.zoom();
+            this.graph.zoom(zoom + 0.3);
+        }, 20);
+    }
+
+    // READY
+    zoomOut(){
+        this.timeoutHandler = setInterval(() => {
+            let zoom = this.graph.zoom();
+            this.graph.zoom(zoom - 0.3);
+        }, 20);
+    }
+
+    // READY
+    clearInterval(){
+        clearInterval(this.timeoutHandler);
+    }
+
+    // READY
+    ngAfterViewInit() {
+        this.mouseDown$ = fromEvent(this.el.nativeElement, 'mousedown');
+        this.mouseUp$ = fromEvent(this.el.nativeElement, 'mouseup');
+    }
+
+    // NEEDS TO BE IMPLEMENTED
+    downloadData(){
+        if (this.results.length != this.foundedPatterns) {
+            this.ngxNotifierService.createToast(`Please wait for all found patterns to be loaded. ${this.foundedPatterns} of ${this.results.length} patterns of results found`, 'danger', 3000);
+            return;
+        }
+        if (this.results.length == 0) {
+            this.ngxNotifierService.createToast('No results to export.', 'danger', 3000)
+            return;
+        };
+        this.closeModalDownload = this.modalService.open(DownloadComponent, { centered: true, size: 'md' });
+        this.closeModalDownload.result
+        .then((res) => {
+            let now, nameFile, list, replacer, header, csv, csvArray;
+            switch (res) {
+                case 'csv':
+                    now = new Date();
+                    nameFile = 'PPSS_Results_' + now.getDate() + '-' + (now.getMonth()+1) + '-' + now.getFullYear() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds() + '.csv';
+                    list = this.results.map((r, index) => {
+                        r = { 'index': (index + 1).toString() , ... r };
+                        return r;
+                    })
+                    replacer = (key, value) => value === null ? '' : value;
+                    header = Object.keys(list[0]);
+                    csv = list.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+                    csv.unshift(header.join(','));
+                    csvArray = csv.join('\r\n');
+                    var blob = new Blob([csvArray], { type: 'text/csv' })
+                    saveAs(blob, nameFile);
+                    this.ngxNotifierService.createToast('Successfully exported results!', 'success', 3000);
+                    break;
+                case 'xlsx':
+                    now = new Date();
+                    nameFile = 'PPSS_Results_' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds() + '.xlsx';
+                    list = this.results.map((r, index) => {
+                        r = { 'index': (index + 1).toString(), ...r };
+                        return r;
+                    })
+                    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(list);
+                    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Result PPSS');
+
+                    XLSX.writeFile(wb, nameFile);
+                    this.ngxNotifierService.createToast('Successfully exported results!', 'success', 3000);
+                    break;
+                case 'txt':
+                    now = new Date();
+                    nameFile = 'PPSS_Results_' + now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '_' + now.getHours() + '-' + now.getMinutes() + '-' + now.getSeconds() + '.txt';
+                    list = this.results.map((r, index) => {
+                        r = { 'index': (index + 1).toString(), ...r };
+                        return r;
+                    })
+                    replacer = (key, value) => value === null ? '' : value;
+                    header = Object.keys(list[0]);
+                    csv = list.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+                    csv.unshift(header.join(','));
+                    csvArray = csv.join('\r\n');
+                    var blob = new Blob([csvArray], { type: 'text/plain' })
+                    saveAs(blob, nameFile);
+                    this.ngxNotifierService.createToast('Successfully exported results!', 'success', 3000);
+                    break;
+            
+                default:
+                    break;
+            }
+        })
+        .catch((error) => {
+            this.ngxNotifierService.createToast('The requested file could not be downloaded. Please try again later', 'danger', 3000);
+        })
+    }
+
+    // READY
+    filterTable(term: string, input: string) {
+        if (this.filterID == '' && this.filterTitle == '' && this.filterClassification == '' && this.filterOrganism == '' && this.filterPattern == ''){
+            this.filteredResults = this.results;
+            this.onPageChange(1);
+        }
+        switch (input) {
+            case 'id':
+                this.filterID = term;
+                break;
+            case 'title':
+                this.filterTitle = term;
+                break;
+            case 'classification':
+                this.filterClassification = term;
+                break;
+            case 'organism':
+                this.filterOrganism = term;
+                break;
+            case 'pattern':
+                this.filterPattern = term;
+                break;
+        }
+        this.filteredResults = this.results.filter(r => {
+            if (r.id.toLowerCase().includes(this.filterID.toLowerCase()) &&
+                r.title.toLowerCase().includes(this.filterTitle.toLowerCase()) &&
+                r.classification.toLowerCase().includes(this.filterClassification.toLowerCase()) &&
+                r.organism.toLowerCase().includes(this.filterOrganism.toLowerCase()) &&
+                r.pattern.toLowerCase().includes(this.filterPattern.toLowerCase())
+                ){
+                    return true;
+            }
+            return false;
+        })
+        this.collectionSize = this.filteredResults.length;
+        this.onPageChange(1);
     }
 }
