@@ -30,6 +30,7 @@
     "antlr4": "^4.12.0",
     "antlr4-tool": "^1.1.1",
     "bootstrap": "^5.2.3",
+    "file-saver": "^2.0.5",
     "force-graph": "^1.43.0",
     "jquery": "^3.6.4",
     "ngx-cookie-service": "^15.0.0",
@@ -40,6 +41,7 @@
     "rxjs-compat": "^6.6.7",
     "three": "^0.150.1",
     "tslib": "^2.3.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
@@ -47,6 +49,7 @@
     "@angular/cli": "~15.0.3",
     "@angular/compiler-cli": "^15.0.0",
     "@angular/localize": "^15.0.0",
+    "@types/file-saver": "^2.0.5",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
